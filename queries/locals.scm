@@ -103,3 +103,4 @@
 ; =============================================================================
 
 (identifier) @local.reference
+(this_expression) @local.reference

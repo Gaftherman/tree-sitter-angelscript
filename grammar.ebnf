@@ -41,7 +41,7 @@ CONTINUE      ::= 'continue' ';'
 EXPR          ::= EXPRTERM (EXPROP EXPRTERM)*
 CASE          ::= (('case' EXPR) | 'default') ':' STATEMENT*
 EXPRTERM      ::= ((TYPE '=')? INITLIST) | (EXPRPREOP* EXPRVALUE EXPRPOSTOP*)
-EXPRVALUE     ::= 'void' | CONSTRUCTCALL | FUNCCALL | VARACCESS | CAST | LITERAL | '(' ASSIGN ')' | LAMBDA
+EXPRVALUE     ::= 'void' | 'this' | CONSTRUCTCALL | FUNCCALL | VARACCESS | CAST | LITERAL | '(' ASSIGN ')' | LAMBDA
 CONSTRUCTCALL ::= TYPE ARGLIST
 EXPRPREOP     ::= '-' | '+' | '!' | 'not' | '++' | '--' | '~' | '@'
 EXPRPOSTOP    ::= ('.' (FUNCCALL | IDENTIFIER)) | ('[' (IDENTIFIER ':')? ASSIGN (',' (IDENTIFIER ':')? ASSIGN)* ']') | ARGLIST | '++' | '--'

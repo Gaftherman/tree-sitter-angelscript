@@ -540,6 +540,7 @@ module.exports = grammar({
       $.string_literal,
       $.boolean_literal,
       $.null_literal,
+      $.this_expression,
       $.scoped_identifier,
     ),
 
@@ -755,6 +756,8 @@ module.exports = grammar({
     boolean_literal: _ => choice("true", "false"),
 
     null_literal: _ => "null",
+
+    this_expression: _ => "this",
 
     // Adjacent string literals concatenate implicitly: "a" "b" == "ab"
     concatenated_string: $ => prec.left(seq(

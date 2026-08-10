@@ -1428,3 +1428,38 @@ void test() {
           (scoped_identifier
             (identifier)))
         (statement_block)))))
+
+================================================================================
+this expression
+================================================================================
+
+class Foo
+{
+  void Bar()
+  {
+    this.Baz();
+    return this;
+  }
+}
+
+--------------------------------------------------------------------------------
+
+(script
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (func_declaration
+        return_type: (type
+          (datatype
+            (primitive_type)))
+        name: (identifier)
+        parameters: (parameter_list)
+        body: (statement_block
+          (expression_statement
+            (call_expression
+              function: (member_expression
+                object: (this_expression)
+                member: (identifier))
+              arguments: (argument_list)))
+          (return_statement
+            (this_expression)))))))
