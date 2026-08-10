@@ -9,9 +9,12 @@ enum Color { RED, GREEN, BLUE }
 (script
   (enum_declaration
     name: (identifier)
-    (enum_member name: (identifier))
-    (enum_member name: (identifier))
-    (enum_member name: (identifier))))
+    (enum_member
+      name: (identifier))
+    (enum_member
+      name: (identifier))
+    (enum_member
+      name: (identifier))))
 
 ==================
 Enum with assigned values
@@ -24,9 +27,15 @@ enum Priority { LOW = 0, MEDIUM = 1, HIGH = 2 }
 (script
   (enum_declaration
     name: (identifier)
-    (enum_member name: (identifier) value: (number_literal))
-    (enum_member name: (identifier) value: (number_literal))
-    (enum_member name: (identifier) value: (number_literal))))
+    (enum_member
+      name: (identifier)
+      value: (number_literal))
+    (enum_member
+      name: (identifier)
+      value: (number_literal))
+    (enum_member
+      name: (identifier)
+      value: (number_literal))))
 
 ==================
 Shared enum
@@ -38,10 +47,12 @@ shared enum Flags { NONE, ALL }
 
 (script
   (enum_declaration
-    modifier: (declaration_modifier)
+    modifier: (shared_external_modifier)
     name: (identifier)
-    (enum_member name: (identifier))
-    (enum_member name: (identifier))))
+    (enum_member
+      name: (identifier))
+    (enum_member
+      name: (identifier))))
 
 ==================
 Forward-declared enum
@@ -52,7 +63,8 @@ enum Color;
 ---
 
 (script
-  (enum_declaration name: (identifier)))
+  (enum_declaration
+    name: (identifier)))
 
 ==================
 Typedef
@@ -91,7 +103,9 @@ class Bar : Base { }
 (script
   (class_declaration
     name: (identifier)
-    (base_class_list base: (identifier))
+    (base_class_list
+      base: (scoped_identifier
+        (identifier)))
     body: (class_body)))
 
 ==================
@@ -106,8 +120,10 @@ class Entity : Serializable, Updateable { }
   (class_declaration
     name: (identifier)
     (base_class_list
-      base: (identifier)
-      base: (identifier))
+      base: (scoped_identifier
+        (identifier))
+      base: (scoped_identifier
+        (identifier)))
     body: (class_body)))
 
 ==================
@@ -134,7 +150,8 @@ class Foo;
 ---
 
 (script
-  (class_declaration name: (identifier)))
+  (class_declaration
+    name: (identifier)))
 
 ==================
 Class with members
@@ -151,16 +168,26 @@ class Player : Entity {
 (script
   (class_declaration
     name: (identifier)
-    (base_class_list base: (identifier))
+    (base_class_list
+      base: (scoped_identifier
+        (identifier)))
     body: (class_body
       (variable_declaration
-        var_type: (type (datatype (primitive_type)))
-        (variable_declarator name: (identifier)))
+        var_type: (type
+          (datatype
+            (primitive_type)))
+        (variable_declarator
+          name: (identifier)))
       (variable_declaration
-        var_type: (type (datatype (identifier)))
-        (variable_declarator name: (identifier)))
+        var_type: (type
+          (datatype
+            (identifier)))
+        (variable_declarator
+          name: (identifier)))
       (func_declaration
-        return_type: (type (datatype (primitive_type)))
+        return_type: (type
+          (datatype
+            (primitive_type)))
         name: (identifier)
         parameters: (parameter_list)
         body: (statement_block)))))
@@ -207,11 +234,15 @@ interface IRenderable {
     name: (identifier)
     body: (interface_body
       (interface_method
-        return_type: (type (datatype (primitive_type)))
+        return_type: (type
+          (datatype
+            (primitive_type)))
         name: (identifier)
         parameters: (parameter_list))
       (interface_method
-        return_type: (type (datatype (primitive_type)))
+        return_type: (type
+          (datatype
+            (primitive_type)))
         name: (identifier)
         parameters: (parameter_list)))))
 
@@ -226,7 +257,9 @@ interface IRenderable : IDrawable { }
 (script
   (interface_declaration
     name: (identifier)
-    (base_class_list base: (identifier))
+    (base_class_list
+      base: (scoped_identifier
+        (identifier)))
     body: (interface_body)))
 
 ==================
@@ -238,7 +271,8 @@ interface IFoo;
 ---
 
 (script
-  (interface_declaration name: (identifier)))
+  (interface_declaration
+    name: (identifier)))
 
 ==================
 Funcdef
@@ -250,11 +284,15 @@ funcdef void Callback(int);
 
 (script
   (funcdef_declaration
-    return_type: (type (datatype (primitive_type)))
+    return_type: (type
+      (datatype
+        (primitive_type)))
     name: (identifier)
     parameters: (parameter_list
       (parameter
-        param_type: (type (datatype (primitive_type)))))))
+        param_type: (type
+          (datatype
+            (primitive_type)))))))
 
 ==================
 Shared funcdef
@@ -266,14 +304,20 @@ shared funcdef bool Predicate(int, int);
 
 (script
   (funcdef_declaration
-    modifier: (declaration_modifier)
-    return_type: (type (datatype (primitive_type)))
+    modifier: (shared_external_modifier)
+    return_type: (type
+      (datatype
+        (primitive_type)))
     name: (identifier)
     parameters: (parameter_list
       (parameter
-        param_type: (type (datatype (primitive_type))))
+        param_type: (type
+          (datatype
+            (primitive_type))))
       (parameter
-        param_type: (type (datatype (primitive_type)))))))
+        param_type: (type
+          (datatype
+            (primitive_type)))))))
 
 ==================
 Import declaration
@@ -285,11 +329,15 @@ import void init(int x) from "module";
 
 (script
   (import_declaration
-    return_type: (type (datatype (primitive_type)))
+    return_type: (type
+      (datatype
+        (primitive_type)))
     name: (identifier)
     parameters: (parameter_list
       (parameter
-        param_type: (type (datatype (primitive_type)))
+        param_type: (type
+          (datatype
+            (primitive_type)))
         name: (identifier)))
     source: (string_literal)))
 
@@ -317,7 +365,8 @@ namespace Game { }
 
 (script
   (namespace_declaration
-    name: (scoped_identifier (identifier))
+    name: (scoped_identifier
+      (identifier))
     body: (namespace_body)))
 
 ==================
@@ -330,7 +379,9 @@ namespace A::B { }
 
 (script
   (namespace_declaration
-    name: (scoped_identifier (identifier) (identifier))
+    name: (scoped_identifier
+      (identifier)
+      (identifier))
     body: (namespace_body)))
 
 ==================
@@ -346,13 +397,19 @@ namespace Game {
 
 (script
   (namespace_declaration
-    name: (scoped_identifier (identifier))
+    name: (scoped_identifier
+      (identifier))
     body: (namespace_body
       (variable_declaration
-        var_type: (type (datatype (primitive_type)))
-        (variable_declarator name: (identifier)))
+        var_type: (type
+          (datatype
+            (primitive_type)))
+        (variable_declarator
+          name: (identifier)))
       (func_declaration
-        return_type: (type (datatype (primitive_type)))
+        return_type: (type
+          (datatype
+            (primitive_type)))
         name: (identifier)
         parameters: (parameter_list)
         body: (statement_block)))))
@@ -367,10 +424,14 @@ int myProp { get { } set { } }
 
 (script
   (virtual_property
-    prop_type: (type (datatype (primitive_type)))
+    prop_type: (type
+      (datatype
+        (primitive_type)))
     name: (identifier)
-    (accessor body: (statement_block))
-    (accessor body: (statement_block))))
+    (accessor
+      body: (statement_block))
+    (accessor
+      body: (statement_block))))
 
 ==================
 Virtual property with const get
@@ -382,9 +443,12 @@ int myProp { get const { } }
 
 (script
   (virtual_property
-    prop_type: (type (datatype (primitive_type)))
+    prop_type: (type
+      (datatype
+        (primitive_type)))
     name: (identifier)
-    (accessor body: (statement_block))))
+    (accessor
+      body: (statement_block))))
 
 ==================
 Private virtual property
@@ -396,10 +460,14 @@ private int value { get { } set { } }
 
 (script
   (virtual_property
-    prop_type: (type (datatype (primitive_type)))
+    prop_type: (type
+      (datatype
+        (primitive_type)))
     name: (identifier)
-    (accessor body: (statement_block))
-    (accessor body: (statement_block))))
+    (accessor
+      body: (statement_block))
+    (accessor
+      body: (statement_block))))
 
 ==================
 Variable with initializer
@@ -411,7 +479,9 @@ int x = 5;
 
 (script
   (variable_declaration
-    var_type: (type (datatype (primitive_type)))
+    var_type: (type
+      (datatype
+        (primitive_type)))
     (variable_declarator
       name: (identifier)
       (number_literal))))
@@ -426,10 +496,14 @@ Foo obj(1, 2);
 
 (script
   (variable_declaration
-    var_type: (type (datatype (identifier)))
+    var_type: (type
+      (datatype
+        (identifier)))
     (variable_declarator
       name: (identifier)
-      (argument_list (number_literal) (number_literal)))))
+      (argument_list
+        (number_literal)
+        (number_literal)))))
 
 ==================
 Variable with initializer list
@@ -441,7 +515,9 @@ int x = {1, 2, 3};
 
 (script
   (variable_declaration
-    var_type: (type (datatype (primitive_type)))
+    var_type: (type
+      (datatype
+        (primitive_type)))
     (variable_declarator
       name: (identifier)
       (initializer_list
@@ -459,7 +535,9 @@ const int MAX = 100;
 
 (script
   (variable_declaration
-    var_type: (type (datatype (primitive_type)))
+    var_type: (type
+      (datatype
+        (primitive_type)))
     (variable_declarator
       name: (identifier)
       (number_literal))))
@@ -475,9 +553,13 @@ A::B obj;
 (script
   (variable_declaration
     var_type: (type
-      (scope (identifier))
-      (datatype (identifier)))
-    (variable_declarator name: (identifier))))
+      (scope
+        (scoped_identifier
+          (identifier)))
+      (datatype
+        (identifier)))
+    (variable_declarator
+      name: (identifier))))
 
 ==================
 Handle type variable
@@ -489,8 +571,11 @@ Foo@ handle;
 
 (script
   (variable_declaration
-    var_type: (type (datatype (identifier)))
-    (variable_declarator name: (identifier))))
+    var_type: (type
+      (datatype
+        (identifier)))
+    (variable_declarator
+      name: (identifier))))
 
 ==================
 Array type variable
@@ -502,8 +587,11 @@ int[] arr;
 
 (script
   (variable_declaration
-    var_type: (type (datatype (primitive_type)))
-    (variable_declarator name: (identifier))))
+    var_type: (type
+      (datatype
+        (primitive_type)))
+    (variable_declarator
+      name: (identifier))))
 
 ==================
 Auto type variable
@@ -515,7 +603,8 @@ auto x = 42;
 
 (script
   (variable_declaration
-    var_type: (type (datatype))
+    var_type: (type
+      (datatype))
     (variable_declarator
       name: (identifier)
       (number_literal))))
@@ -530,7 +619,9 @@ int a = 1, b = 2, c;
 
 (script
   (variable_declaration
-    var_type: (type (datatype (primitive_type)))
+    var_type: (type
+      (datatype
+        (primitive_type)))
     (variable_declarator
       name: (identifier)
       (number_literal))
@@ -550,13 +641,18 @@ Foo a(1), b(2, 3);
 
 (script
   (variable_declaration
-    var_type: (type (datatype (identifier)))
+    var_type: (type
+      (datatype
+        (identifier)))
     (variable_declarator
       name: (identifier)
-      (argument_list (number_literal)))
+      (argument_list
+        (number_literal)))
     (variable_declarator
       name: (identifier)
-      (argument_list (number_literal) (number_literal)))))
+      (argument_list
+        (number_literal)
+        (number_literal)))))
 
 ==================
 Multiple declarators with mixed init
@@ -568,7 +664,9 @@ int a = 1, b, c = 3;
 
 (script
   (variable_declaration
-    var_type: (type (datatype (primitive_type)))
+    var_type: (type
+      (datatype
+        (primitive_type)))
     (variable_declarator
       name: (identifier)
       (number_literal))
@@ -588,23 +686,12 @@ string s = """hello world""";
 
 (script
   (variable_declaration
-    var_type: (type (datatype (identifier)))
+    var_type: (type
+      (datatype
+        (identifier)))
     (variable_declarator
       name: (identifier)
       (string_literal))))
-
-==================
-Typedef with user-defined type
-==================
-
-typedef MyClass AliasName;
-
----
-
-(script
-  (typedef_declaration
-    base_type: (identifier)
-    name: (identifier)))
 
 ==================
 Mixin class with modifiers
@@ -630,8 +717,10 @@ external funcdef void NativeCallback();
 
 (script
   (funcdef_declaration
-    modifier: (declaration_modifier)
-    return_type: (type (datatype (primitive_type)))
+    modifier: (shared_external_modifier)
+    return_type: (type
+      (datatype
+        (primitive_type)))
     name: (identifier)
     parameters: (parameter_list)))
 
@@ -650,7 +739,9 @@ class A {
     name: (identifier)
     body: (class_body
       (virtual_property
-        prop_type: (type (datatype (primitive_type)))
+        prop_type: (type
+          (datatype
+            (primitive_type)))
         name: (identifier)
         (accessor)
         (accessor)))))
@@ -670,7 +761,9 @@ class A {
     name: (identifier)
     body: (class_body
       (virtual_property
-        prop_type: (type (datatype (identifier)))
+        prop_type: (type
+          (datatype
+            (identifier)))
         name: (identifier)
         (accessor)))))
 
@@ -684,7 +777,9 @@ Foo@ f = null;
 
 (script
   (variable_declaration
-    var_type: (type (datatype (identifier)))
+    var_type: (type
+      (datatype
+        (identifier)))
     (variable_declarator
       name: (identifier)
       (null_literal))))

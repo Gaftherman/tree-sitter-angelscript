@@ -37,10 +37,19 @@ module.exports = grammar({
   conflicts: $ => [
     // argument_list vs parameter_list: both match '(' ... ')'
     [$.parameter_list, $.argument_list],
-    // identifier in argument/parameter context can be expression or type
-    [$.datatype, $._expression],
     // identifier followed by '<' could be datatype + template_type_list or scope + template in scope chain
-    [$.scope, $.datatype],
+    [$.scoped_identifier, $.datatype],
+    // lambda param `function(x, y)`: identifier can be untyped name or type of typed param
+    [$.datatype, $.lambda_parameter_list],
+    // `(void ...)` after identifier: parameter_list vs argument_list with void arg
+    [$.argument_list, $.primitive_type],
+    // `A::B` at statement start: type scope (var decl) vs expression scoped_identifier
+    [$.scoped_identifier, $.scope],
+    // extend scoped chain vs trailing '::' of type scope
+    [$.scoped_identifier],
+    // leading 'shared'/'external' modifiers: ambiguous until the following
+    // keyword ('class'/'interface' vs 'enum'/'funcdef') disambiguates.
+    [$.declaration_modifier, $.shared_external_modifier],
   ],
 
   rules: {
@@ -84,13 +93,16 @@ module.exports = grammar({
     using_declaration: $ => seq(
       "using",
       "namespace",
-      $.scoped_identifier,
+      field("name", $.scoped_identifier),
       ";",
     ),
 
+    // Plain identifier or scope-qualified: foo, ::foo, NS::foo, NS::T<int>::foo
+    // Flat repeat: avoids early scope reduction on multi-level chains (A::B::c)
     scoped_identifier: $ => seq(
+      optional("::"),
       $.identifier,
-      repeat(seq("::", $.identifier)),
+      repeat(seq("::", $.identifier, optional($.template_type_list))),
     ),
 
     // =========================================================================
@@ -126,12 +138,14 @@ module.exports = grammar({
     // ENUM
     // =========================================================================
     enum_declaration: $ => seq(
-      repeat(field("modifier", $.declaration_modifier)),
+      repeat(field("modifier", $.shared_external_modifier)),
       "enum",
       field("name", $.identifier),
       choice(
         ";",
         seq(
+          // scoped enum with explicit underlying type (AS 2.31+)
+          optional(seq(":", field("underlying_type", choice($.primitive_type, $.identifier)))),
           "{",
           commaSep($.enum_member),
           optional(","),
@@ -150,7 +164,7 @@ module.exports = grammar({
     // =========================================================================
     typedef_declaration: $ => seq(
       "typedef",
-      field("base_type", choice($.primitive_type, $.identifier)),
+      field("base_type", $.primitive_type),
       field("name", $.identifier),
       ";",
     ),
@@ -173,7 +187,7 @@ module.exports = grammar({
 
     base_class_list: $ => seq(
       ":",
-      commaSep1(field("base", $.identifier)),
+      commaSep1(field("base", $.scoped_identifier)),
     ),
 
     class_body: $ => seq(
@@ -183,6 +197,9 @@ module.exports = grammar({
         $.func_declaration,
         $.variable_declaration,
         $.funcdef_declaration,
+        // stray ';' after a member (e.g. `void Foo() {};`) is tolerated by
+        // the real compiler, same as at script scope.
+        ";",
       )),
       "}",
     ),
@@ -208,7 +225,7 @@ module.exports = grammar({
     // INTERFACE
     // =========================================================================
     interface_declaration: $ => seq(
-      repeat(field("modifier", $.declaration_modifier)),
+      repeat(field("modifier", $.shared_external_modifier)),
       "interface",
       field("name", $.identifier),
       choice(
@@ -242,7 +259,7 @@ module.exports = grammar({
     // FUNCDEF
     // =========================================================================
     funcdef_declaration: $ => seq(
-      repeat(field("modifier", $.declaration_modifier)),
+      repeat(field("modifier", $.shared_external_modifier)),
       "funcdef",
       field("return_type", $.type),
       optional("&"),
@@ -255,7 +272,7 @@ module.exports = grammar({
     // FUNC
     // =========================================================================
     func_declaration: $ => prec.dynamic(2, seq(
-      repeat(field("modifier", $.declaration_modifier)),
+      repeat(field("modifier", $.shared_external_modifier)),
       optional(choice("private", "protected")),
       optional(
         choice(
@@ -275,6 +292,10 @@ module.exports = grammar({
     ),
 
     declaration_modifier: _ => choice("shared", "external", "abstract", "final"),
+
+    // Strict subset for declarations that don't support 'abstract'/'final'
+    // (funcdef, enum) per the AngelScript BNF.
+    shared_external_modifier: _ => choice("shared", "external"),
 
     // =========================================================================
     // VIRTUAL PROPERTY
@@ -436,7 +457,7 @@ module.exports = grammar({
         "...",
         seq(
           optional(field("name", $.identifier)),
-          optional(seq("=", field("default_value", $._expression))),
+          optional(seq("=", field("default_value", choice("void", $._expression)))),
         ),
       ),
     ),
@@ -462,10 +483,12 @@ module.exports = grammar({
       $._template_close,
     ),
 
-    scope: $ => prec.left(choice(
+    // Scope chain for types: :: | ::? NS:: | ::? NS::T<int>::NS2:: ...
+    // Reuses scoped_identifier shape (flat greedy) + trailing '::'
+    scope: $ => choice(
       "::",
-      seq(optional("::"), repeat1(seq($.identifier, optional($.template_type_list), "::"))),
-    )),
+      seq($.scoped_identifier, "::"),
+    ),
 
     datatype: $ => choice(
       $.identifier,
@@ -477,22 +500,25 @@ module.exports = grammar({
     // =========================================================================
     // EXPRESSIONS — Full system with correct operator precedence
     //
-    // Precedence table (low to high):
+    // Precedence table (low to high), per doc_script_precedence.md.
+    // Note this deliberately differs from C: bitwise &|^ bind TIGHTER than
+    // comparison/equality (avoids C's `a & b == c` gotcha), and xor/^^
+    // shares a tier with equality/identity rather than sitting between
+    // or and and.
     //   1  = += -= *= /= %= **= |= &= ^= <<= >>= >>>=  (right)
     //   2  ?: ternary                                     (right)
     //   3  || or                                          (left)
-    //   4  ^^ xor                                        (left)
-    //   5  && and                                         (left)
-    //   6  | (bitwise OR)                                 (left)
-    //   7  ^ (bitwise XOR)                                (left)
-    //   8  & (bitwise AND)                                (left)
-    //   9  == != is !is                                   (left)
-    //  10  < <= > >=                                      (left)
-    //  11  << >> >>>                                      (left)
-    //  12  + - (binary)                                   (left)
-    //  13  * / %                                          (left)
-    //  14  ** (exponent)                                  (right)
-    //  15  unary prefix: - + ! ~ @ ++ --                  (right)
+    //   4  && and                                         (left)
+    //   5  == != is !is xor ^^                             (left)
+    //   6  < <= > >=                                      (left)
+    //   7  | (bitwise OR)                                 (left)
+    //   8  ^ (bitwise XOR)                                (left)
+    //   9  & (bitwise AND)                                (left)
+    //  10  << >> >>>                                      (left)
+    //  11  + - (binary)                                   (left)
+    //  12  * / %                                          (left)
+    //  13  ** (exponent)                                  (right)
+    //  15  unary prefix: - + ! not ~ @ ++ --               (right)
     //  16  postfix: .member [index] () ++ --              (left)
     // =========================================================================
     _expression: $ => choice(
@@ -504,14 +530,17 @@ module.exports = grammar({
       $.call_expression,
       $.member_expression,
       $.index_expression,
+      $.functional_cast_expression,
       $.cast_expression,
+      $.construct_call_expression,
       $.lambda_expression,
       $.parenthesized_expression,
       $.number_literal,
+      $.concatenated_string,
       $.string_literal,
       $.boolean_literal,
       $.null_literal,
-      $.identifier,
+      $.scoped_identifier,
     ),
 
     parenthesized_expression: $ => seq("(", $._expression, ")"),
@@ -523,7 +552,8 @@ module.exports = grammar({
         "=", "+=", "-=", "*=", "/=", "%=", "**=",
         "&=", "|=", "^=", "<<=", ">>=", ">>>=", "@=",
       )),
-      field("right", $._expression),
+      // RHS may be brace init list: dict = {{'a', 1}}
+      field("right", choice($.initializer_list, $._expression)),
     )),
 
     // --- Ternary (prec 2, right-associative) ---
@@ -535,45 +565,44 @@ module.exports = grammar({
       field("alternative", $._expression),
     )),
 
-    // --- Binary operators (prec 3–14) ---
+    // --- Binary operators (prec 3–13) ---
     binary_expression: $ => {
       const table = [
         // prec 3: logical OR
         ["||", 3],
         ["or", 3],
-        // prec 4: logical XOR
-        ["^^", 4],
-        ["xor", 4],
-        // prec 5: logical AND
-        ["&&", 5],
-        ["and", 5],
-        // prec 6: bitwise OR
-        ["|", 6],
-        // prec 7: bitwise XOR
-        ["^", 7],
-        // prec 8: bitwise AND
-        ["&", 8],
-        // prec 9: equality / identity
-        ["==", 9],
-        ["!=", 9],
-        ["is", 9],
-        ["!is", 9],
-        // prec 10: relational
-        ["<", 10],
-        [">", 10],
-        ["<=", 10],
-        [">=", 10],
-        // prec 11: shift
-        ["<<", 11],
-        [">>", 11],
-        [">>>", 11],
-        // prec 12: additive
-        ["+", 12],
-        ["-", 12],
-        // prec 13: multiplicative
-        ["*", 13],
-        ["/", 13],
-        ["%", 13],
+        // prec 4: logical AND
+        ["&&", 4],
+        ["and", 4],
+        // prec 5: equality / identity / logical XOR (same tier in AngelScript)
+        ["==", 5],
+        ["!=", 5],
+        ["is", 5],
+        ["!is", 5],
+        ["^^", 5],
+        ["xor", 5],
+        // prec 6: relational
+        ["<", 6],
+        [">", 6],
+        ["<=", 6],
+        [">=", 6],
+        // prec 7: bitwise OR
+        ["|", 7],
+        // prec 8: bitwise XOR
+        ["^", 8],
+        // prec 9: bitwise AND
+        ["&", 9],
+        // prec 10: shift
+        ["<<", 10],
+        [">>", 10],
+        [">>>", 10],
+        // prec 11: additive
+        ["+", 11],
+        ["-", 11],
+        // prec 12: multiplicative
+        ["*", 12],
+        ["/", 12],
+        ["%", 12],
       ];
 
       return choice(
@@ -584,8 +613,8 @@ module.exports = grammar({
             field("right", $._expression),
           )),
         ),
-        // prec 14: exponentiation (right-associative)
-        prec.right(14, seq(
+        // prec 13: exponentiation (right-associative)
+        prec.right(13, seq(
           field("left", $._expression),
           field("operator", "**"),
           field("right", $._expression),
@@ -594,9 +623,9 @@ module.exports = grammar({
     },
 
     // --- Unary prefix (prec 15, right-associative) ---
-    // Includes @ (handle-of operator)
+    // Includes @ (handle-of operator). 'not' is the keyword form of '!'.
     unary_expression: $ => prec.right(15, seq(
-      field("operator", choice("-", "+", "!", "~", "@", "++", "--")),
+      field("operator", choice("-", "+", "!", "not", "~", "@", "++", "--")),
       field("operand", $._expression),
     )),
 
@@ -635,6 +664,13 @@ module.exports = grammar({
 
     // --- Cast expression ---
     // Uses external scanner tokens to disambiguate < > from comparison operators
+    functional_cast_expression: $ => prec.left(16, seq(
+      field("type", $.primitive_type),
+      "(",
+      field("value", $._expression),
+      ")",
+    )),
+
     cast_expression: $ => seq(
       "cast",
       $._template_open,
@@ -645,23 +681,46 @@ module.exports = grammar({
       ")",
     ),
 
+    // --- Constructor call with explicit template args: array<int>(args) ---
+    // Requires template_type_list so plain Type(args) stays call_expression.
+    construct_call_expression: $ => seq(
+      optional($.scope),
+      field("type", $.datatype),
+      $.template_type_list,
+      field("arguments", $.argument_list),
+    ),
+
     // --- Lambda expression ---
-    // Reuses parameter_list to stay DRY with func_declaration
+    // EBNF LAMBDA: params may omit type: function(x) { ... }
     lambda_expression: $ => seq(
       "function",
-      field("parameters", $.parameter_list),
+      field("parameters", $.lambda_parameter_list),
       field("body", $.statement_block),
+    ),
+
+    lambda_parameter_list: $ => seq(
+      "(",
+      commaSep1(seq(
+        optional(seq(
+          field("param_type", $.type),
+          optional(seq("&", optional(choice("in", "out", "inout")))),
+        )),
+        optional(field("name", $.identifier)),
+      )),
+      ")",
     ),
 
     // =========================================================================
     // INITIALIZER LIST & ARGUMENT LIST
     // =========================================================================
-    // initializer_list is in _expression, so nesting ({1, {2, 3}}) works
-    // automatically without special-casing.
     // initializer_list is NOT in _expression to avoid {}-vs-statement_block
     // ambiguity. It is reachable from variable_declaration and return_statement
     // RHS. Nesting works via choice($.initializer_list, $._expression).
-    _initializer_element: $ => choice($.initializer_list, $._expression),
+    _initializer_element: $ => choice(
+      $.initializer_list,
+      $.typed_initializer_list,
+      $._expression,
+    ),
 
     initializer_list: $ => seq(
       "{",
@@ -670,12 +729,22 @@ module.exports = grammar({
       "}",
     ),
 
+    // Anonymous typed list construction used as a value, e.g. a dictionary
+    // entry: {"key", array<string> = {"a", "b"}}
+    typed_initializer_list: $ => seq(
+      field("type", $.type),
+      "=",
+      field("value", $.initializer_list),
+    ),
+
     // Supports named arguments: foo(arg1: val1, arg2: val2)
+    // and brace init lists as arguments: foo({1, 2})
     argument_list: $ => seq(
       "(",
       commaSep(seq(
         optional(seq(field("arg_name", $.identifier), ":")),
-        $._expression,
+        // 'void' argument: func(void) — ignores an output value
+        choice($.initializer_list, $.typed_initializer_list, "void", $._expression),
       )),
       ")",
     ),
@@ -686,6 +755,12 @@ module.exports = grammar({
     boolean_literal: _ => choice("true", "false"),
 
     null_literal: _ => "null",
+
+    // Adjacent string literals concatenate implicitly: "a" "b" == "ab"
+    concatenated_string: $ => prec.left(seq(
+      $.string_literal,
+      repeat1($.string_literal),
+    )),
 
     string_literal: _ => token(choice(
       // Triple-quoted heredoc strings (no escape processing, multiline)

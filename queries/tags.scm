@@ -42,7 +42,7 @@
 
 ; Function calls (references)
 (call_expression
-  function: (identifier) @name) @reference.call
+  function: (scoped_identifier) @name) @reference.call
 
 ; Method calls (references)
 (call_expression

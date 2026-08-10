@@ -51,17 +51,24 @@ static void skip_spaces(TSLexer *lexer) {
 // in a type (like arithmetic operators, numbers, parentheses for calls, or
 // semicolons), it's not a template.
 //
-// The scan is bounded to the current line. Reaching end-of-line or
-// end-of-file before the closing '>' - having seen only plausible template
-// content — most likely means the user is still typing the argument list, so
-// we optimistically treat it as a template. The parser then builds a partial
-// template_type_list (implicitly closed at end-of-line, see scan() below)
-// instead of misparsing '<' as a comparison operator that can stitch this
-// line together with the next one.
+// The scan is bounded to the current line. Reaching end-of-line before the
+// closing '>' with nothing scanned yet (bare '<' right before the newline,
+// as in `if (a <\n b)`) means this is a comparison operator continuing on
+// the next line, so it is NOT a template. But if the line ends right after
+// an identifier/keyword (`TArray<int` with nothing following), the type
+// name itself is syntactically complete and the code is most likely still
+// being typed, so we optimistically treat it as a template: the parser then
+// emits a zero-width TEMPLATE_CLOSE at EOL/EOF (see scan() below) and builds
+// a partial template_type_list for error recovery. Lines ending right after
+// ',' or '<' are clearly incomplete argument lists, so we keep scanning on
+// the next line instead of deciding yet (multi-line template args:
+// `dict<string,\n     int>`).
 static bool scan_template_content(TSLexer *lexer) {
     int depth = 1;
     // Limit lookahead to avoid pathological cases
     int limit = 256;
+    // Last significant (non-space) character scanned
+    int32_t last = 0;
 
     while (depth > 0 && limit > 0) {
         limit--;
@@ -74,15 +81,25 @@ static bool scan_template_content(TSLexer *lexer) {
         int32_t c = lexer->lookahead;
 
         if (is_eol(c)) {
-            // Incomplete line - optimistically a template. Argument lists
-            // that legitimately continue after a ',' also end up here and
-            // parse fine; only a closing '>' placed on its own line would
-            // be misjudged (a style unused in real code).
-            return true;
+            // ',' or '<' just before EOL: the argument list is clearly
+            // incomplete, keep scanning on the next line.
+            if (last == ',' || last == '<') {
+                lexer->advance(lexer, false);
+                continue;
+            }
+            // Identifier/keyword just before EOL: a syntactically complete
+            // type name with nothing after it — optimistically a template.
+            if (last == 'a') {
+                return true;
+            }
+            // Bare '<' with nothing scanned yet: a comparison operator
+            // continuing on the next line, not a template.
+            return false;
         }
 
         if (c == '<') {
             depth++;
+            last = c;
             lexer->advance(lexer, false);
             continue;
         }
@@ -97,12 +114,13 @@ static bool scan_template_content(TSLexer *lexer) {
             continue;
         }
 
-        // Valid inside template type arguments
-        if (is_alnum(c) || c == '_') {
+        // Valid inside template type arguments (must start with alpha/underscore)
+        if (is_alpha(c)) {
             // Skip identifier/keyword
-            while (is_alnum(lexer->lookahead)) {
+            while (is_alnum(lexer->lookahead) || lexer->lookahead == '_') {
                 lexer->advance(lexer, false);
             }
+            last = 'a';
             continue;
         }
 
@@ -117,6 +135,7 @@ static bool scan_template_content(TSLexer *lexer) {
         // '@' for handle types: Type@
         // '?' for auto type
         if (c == ',' || c == ':' || c == '[' || c == ']' || c == '@' || c == '?') {
+            last = c;
             lexer->advance(lexer, false);
             continue;
         }

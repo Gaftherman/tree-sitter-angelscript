@@ -22,7 +22,7 @@
 (typedef_declaration name: (identifier) @type)
 (funcdef_declaration name: (identifier) @type)
 (mixin_declaration name: (identifier) @type)
-(base_class_list base: (identifier) @type)
+(base_class_list base: (scoped_identifier) @type)
 
 ; Enum members
 (enum_member name: (identifier) @constant)
@@ -82,6 +82,7 @@
 
 ; Modifiers
 (declaration_modifier) @keyword.modifier
+(shared_external_modifier) @keyword.modifier
 [
   "private"
   "protected"
@@ -112,7 +113,7 @@
 (null_literal) @constant.builtin
 
 ; Function calls
-(call_expression function: (identifier) @function.call)
+(call_expression function: (scoped_identifier) @function.call)
 (call_expression function: (member_expression member: (identifier) @function.method.call))
 
 ; Named arguments
@@ -133,6 +134,7 @@
 (assignment_expression operator: _ @operator)
 (unary_expression operator: _ @operator)
 (postfix_expression operator: _ @operator)
+(typed_initializer_list "=" @operator)
 
 ; Index expression
 (index_expression index_name: (identifier) @variable.parameter)

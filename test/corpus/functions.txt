@@ -8,7 +8,9 @@ void main() { }
 
 (script
   (func_declaration
-    return_type: (type (datatype (primitive_type)))
+    return_type: (type
+      (datatype
+        (primitive_type)))
     name: (identifier)
     parameters: (parameter_list)
     body: (statement_block)))
@@ -23,14 +25,20 @@ int add(int a, int b) { }
 
 (script
   (func_declaration
-    return_type: (type (datatype (primitive_type)))
+    return_type: (type
+      (datatype
+        (primitive_type)))
     name: (identifier)
     parameters: (parameter_list
       (parameter
-        param_type: (type (datatype (primitive_type)))
+        param_type: (type
+          (datatype
+            (primitive_type)))
         name: (identifier))
       (parameter
-        param_type: (type (datatype (primitive_type)))
+        param_type: (type
+          (datatype
+            (primitive_type)))
         name: (identifier)))
     body: (statement_block)))
 
@@ -44,11 +52,14 @@ int getValue() { return 42; }
 
 (script
   (func_declaration
-    return_type: (type (datatype (primitive_type)))
+    return_type: (type
+      (datatype
+        (primitive_type)))
     name: (identifier)
     parameters: (parameter_list)
     body: (statement_block
-      (return_statement (number_literal)))))
+      (return_statement
+        (number_literal)))))
 
 ==================
 Const function
@@ -60,7 +71,9 @@ int getValue() const { }
 
 (script
   (func_declaration
-    return_type: (type (datatype (primitive_type)))
+    return_type: (type
+      (datatype
+        (primitive_type)))
     name: (identifier)
     parameters: (parameter_list)
     body: (statement_block)))
@@ -75,8 +88,10 @@ shared private void foo() { }
 
 (script
   (func_declaration
-    modifier: (declaration_modifier)
-    return_type: (type (datatype (primitive_type)))
+    modifier: (shared_external_modifier)
+    return_type: (type
+      (datatype
+        (primitive_type)))
     name: (identifier)
     parameters: (parameter_list)
     body: (statement_block)))
@@ -91,7 +106,9 @@ void bar() override final { }
 
 (script
   (func_declaration
-    return_type: (type (datatype (primitive_type)))
+    return_type: (type
+      (datatype
+        (primitive_type)))
     name: (identifier)
     parameters: (parameter_list)
     (func_attributes)
@@ -107,7 +124,9 @@ void baz();
 
 (script
   (func_declaration
-    return_type: (type (datatype (primitive_type)))
+    return_type: (type
+      (datatype
+        (primitive_type)))
     name: (identifier)
     parameters: (parameter_list)))
 
@@ -149,14 +168,20 @@ void foo(int &in a, float &out b) { }
 
 (script
   (func_declaration
-    return_type: (type (datatype (primitive_type)))
+    return_type: (type
+      (datatype
+        (primitive_type)))
     name: (identifier)
     parameters: (parameter_list
       (parameter
-        param_type: (type (datatype (primitive_type)))
+        param_type: (type
+          (datatype
+            (primitive_type)))
         name: (identifier))
       (parameter
-        param_type: (type (datatype (primitive_type)))
+        param_type: (type
+          (datatype
+            (primitive_type)))
         name: (identifier)))
     body: (statement_block)))
 
@@ -170,11 +195,15 @@ void foo(int x = 0) { }
 
 (script
   (func_declaration
-    return_type: (type (datatype (primitive_type)))
+    return_type: (type
+      (datatype
+        (primitive_type)))
     name: (identifier)
     parameters: (parameter_list
       (parameter
-        param_type: (type (datatype (primitive_type)))
+        param_type: (type
+          (datatype
+            (primitive_type)))
         name: (identifier)
         default_value: (number_literal)))
     body: (statement_block)))
@@ -189,11 +218,15 @@ void foo(int ...) { }
 
 (script
   (func_declaration
-    return_type: (type (datatype (primitive_type)))
+    return_type: (type
+      (datatype
+        (primitive_type)))
     name: (identifier)
     parameters: (parameter_list
       (parameter
-        param_type: (type (datatype (primitive_type)))))
+        param_type: (type
+          (datatype
+            (primitive_type)))))
     body: (statement_block)))
 
 ==================
@@ -206,7 +239,9 @@ void foo() { }
 
 (script
   (func_declaration
-    return_type: (type (datatype (primitive_type)))
+    return_type: (type
+      (datatype
+        (primitive_type)))
     name: (identifier)
     parameters: (parameter_list)
     body: (statement_block)))
@@ -221,7 +256,9 @@ int get_Value() const property { }
 
 (script
   (func_declaration
-    return_type: (type (datatype (primitive_type)))
+    return_type: (type
+      (datatype
+        (primitive_type)))
     name: (identifier)
     parameters: (parameter_list)
     (func_attributes)

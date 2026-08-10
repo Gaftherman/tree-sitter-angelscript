@@ -12,12 +12,15 @@ void f() {
 
 (script
   (func_declaration
-    return_type: (type (datatype (primitive_type)))
+    return_type: (type
+      (datatype
+        (primitive_type)))
     name: (identifier)
     parameters: (parameter_list)
     body: (statement_block
       (if_statement
-        (identifier)
+        (scoped_identifier
+          (identifier))
         consequence: (statement_block
           (return_statement))))))
 
@@ -37,16 +40,23 @@ void f() {
 
 (script
   (func_declaration
-    return_type: (type (datatype (primitive_type)))
+    return_type: (type
+      (datatype
+        (primitive_type)))
     name: (identifier)
     parameters: (parameter_list)
     body: (statement_block
       (if_statement
-        (identifier)
+        (scoped_identifier
+          (identifier))
         consequence: (statement_block
-          (expression_statement (identifier)))
+          (expression_statement
+            (scoped_identifier
+              (identifier))))
         alternative: (statement_block
-          (expression_statement (identifier)))))))
+          (expression_statement
+            (scoped_identifier
+              (identifier))))))))
 
 ================================================================================
 If-else-if chain
@@ -66,20 +76,30 @@ void f() {
 
 (script
   (func_declaration
-    return_type: (type (datatype (primitive_type)))
+    return_type: (type
+      (datatype
+        (primitive_type)))
     name: (identifier)
     parameters: (parameter_list)
     body: (statement_block
       (if_statement
-        (identifier)
+        (scoped_identifier
+          (identifier))
         consequence: (statement_block
-          (expression_statement (identifier)))
+          (expression_statement
+            (scoped_identifier
+              (identifier))))
         alternative: (if_statement
-          (identifier)
+          (scoped_identifier
+            (identifier))
           consequence: (statement_block
-            (expression_statement (identifier)))
+            (expression_statement
+              (scoped_identifier
+                (identifier))))
           alternative: (statement_block
-            (expression_statement (identifier))))))))
+            (expression_statement
+              (scoped_identifier
+                (identifier)))))))))
 
 ================================================================================
 If with single statement (no block)
@@ -93,12 +113,15 @@ void f() {
 
 (script
   (func_declaration
-    return_type: (type (datatype (primitive_type)))
+    return_type: (type
+      (datatype
+        (primitive_type)))
     name: (identifier)
     parameters: (parameter_list)
     body: (statement_block
       (if_statement
-        (identifier)
+        (scoped_identifier
+          (identifier))
         consequence: (return_statement)))))
 
 ================================================================================
@@ -115,23 +138,32 @@ void f() {
 
 (script
   (func_declaration
-    return_type: (type (datatype (primitive_type)))
+    return_type: (type
+      (datatype
+        (primitive_type)))
     name: (identifier)
     parameters: (parameter_list)
     body: (statement_block
       (for_statement
         init: (variable_declaration
-          var_type: (type (datatype (primitive_type)))
+          var_type: (type
+            (datatype
+              (primitive_type)))
           (variable_declarator
             name: (identifier)
             (number_literal)))
         condition: (expression_statement
           (binary_expression
-            left: (identifier)
+            left: (scoped_identifier
+              (identifier))
             right: (number_literal)))
-        update: (postfix_expression operand: (identifier))
+        update: (postfix_expression
+          operand: (scoped_identifier
+            (identifier)))
         body: (statement_block
-          (expression_statement (identifier)))))))
+          (expression_statement
+            (scoped_identifier
+              (identifier))))))))
 
 ================================================================================
 For loop with multiple increments
@@ -147,24 +179,35 @@ void f() {
 
 (script
   (func_declaration
-    return_type: (type (datatype (primitive_type)))
+    return_type: (type
+      (datatype
+        (primitive_type)))
     name: (identifier)
     parameters: (parameter_list)
     body: (statement_block
       (for_statement
         init: (variable_declaration
-          var_type: (type (datatype (primitive_type)))
+          var_type: (type
+            (datatype
+              (primitive_type)))
           (variable_declarator
             name: (identifier)
             (number_literal)))
         condition: (expression_statement
           (binary_expression
-            left: (identifier)
+            left: (scoped_identifier
+              (identifier))
             right: (number_literal)))
-        update: (postfix_expression operand: (identifier))
-        update: (postfix_expression operand: (identifier))
+        update: (postfix_expression
+          operand: (scoped_identifier
+            (identifier)))
+        update: (postfix_expression
+          operand: (scoped_identifier
+            (identifier)))
         body: (statement_block
-          (expression_statement (identifier)))))))
+          (expression_statement
+            (scoped_identifier
+              (identifier))))))))
 
 ================================================================================
 For loop with empty sections
@@ -180,7 +223,9 @@ void f() {
 
 (script
   (func_declaration
-    return_type: (type (datatype (primitive_type)))
+    return_type: (type
+      (datatype
+        (primitive_type)))
     name: (identifier)
     parameters: (parameter_list)
     body: (statement_block
@@ -202,18 +247,25 @@ void f() {
 
 (script
   (func_declaration
-    return_type: (type (datatype (primitive_type)))
+    return_type: (type
+      (datatype
+        (primitive_type)))
     name: (identifier)
     parameters: (parameter_list)
     body: (statement_block
       (for_statement
         condition: (expression_statement
           (binary_expression
-            left: (identifier)
+            left: (scoped_identifier
+              (identifier))
             right: (number_literal)))
-        update: (postfix_expression operand: (identifier))
+        update: (postfix_expression
+          operand: (scoped_identifier
+            (identifier)))
         body: (statement_block
-          (expression_statement (identifier)))))))
+          (expression_statement
+            (scoped_identifier
+              (identifier))))))))
 
 ================================================================================
 For loop with expression init
@@ -229,22 +281,30 @@ void f() {
 
 (script
   (func_declaration
-    return_type: (type (datatype (primitive_type)))
+    return_type: (type
+      (datatype
+        (primitive_type)))
     name: (identifier)
     parameters: (parameter_list)
     body: (statement_block
       (for_statement
         init: (expression_statement
           (assignment_expression
-            left: (identifier)
+            left: (scoped_identifier
+              (identifier))
             right: (number_literal)))
         condition: (expression_statement
           (binary_expression
-            left: (identifier)
+            left: (scoped_identifier
+              (identifier))
             right: (number_literal)))
-        update: (postfix_expression operand: (identifier))
+        update: (postfix_expression
+          operand: (scoped_identifier
+            (identifier)))
         body: (statement_block
-          (expression_statement (identifier)))))))
+          (expression_statement
+            (scoped_identifier
+              (identifier))))))))
 
 ================================================================================
 Foreach single iterator
@@ -260,17 +320,24 @@ void f() {
 
 (script
   (func_declaration
-    return_type: (type (datatype (primitive_type)))
+    return_type: (type
+      (datatype
+        (primitive_type)))
     name: (identifier)
     parameters: (parameter_list)
     body: (statement_block
       (foreach_statement
         (foreach_variable
-          type: (type (datatype (primitive_type)))
+          type: (type
+            (datatype
+              (primitive_type)))
           name: (identifier))
-        collection: (identifier)
+        collection: (scoped_identifier
+          (identifier))
         body: (statement_block
-          (expression_statement (identifier)))))))
+          (expression_statement
+            (scoped_identifier
+              (identifier))))))))
 
 ================================================================================
 Foreach multiple iterators
@@ -286,20 +353,29 @@ void f() {
 
 (script
   (func_declaration
-    return_type: (type (datatype (primitive_type)))
+    return_type: (type
+      (datatype
+        (primitive_type)))
     name: (identifier)
     parameters: (parameter_list)
     body: (statement_block
       (foreach_statement
         (foreach_variable
-          type: (type (datatype (primitive_type)))
+          type: (type
+            (datatype
+              (primitive_type)))
           name: (identifier))
         (foreach_variable
-          type: (type (datatype (primitive_type)))
+          type: (type
+            (datatype
+              (primitive_type)))
           name: (identifier))
-        collection: (identifier)
+        collection: (scoped_identifier
+          (identifier))
         body: (statement_block
-          (expression_statement (identifier)))))))
+          (expression_statement
+            (scoped_identifier
+              (identifier))))))))
 
 ================================================================================
 While loop
@@ -315,16 +391,21 @@ void f() {
 
 (script
   (func_declaration
-    return_type: (type (datatype (primitive_type)))
+    return_type: (type
+      (datatype
+        (primitive_type)))
     name: (identifier)
     parameters: (parameter_list)
     body: (statement_block
       (while_statement
         (binary_expression
-          left: (identifier)
+          left: (scoped_identifier
+            (identifier))
           right: (number_literal))
         body: (statement_block
-          (expression_statement (identifier)))))))
+          (expression_statement
+            (scoped_identifier
+              (identifier))))))))
 
 ================================================================================
 While with single statement
@@ -338,16 +419,21 @@ void f() {
 
 (script
   (func_declaration
-    return_type: (type (datatype (primitive_type)))
+    return_type: (type
+      (datatype
+        (primitive_type)))
     name: (identifier)
     parameters: (parameter_list)
     body: (statement_block
       (while_statement
         (binary_expression
-          left: (identifier)
+          left: (scoped_identifier
+            (identifier))
           right: (number_literal))
         body: (expression_statement
-          (postfix_expression operand: (identifier)))))))
+          (postfix_expression
+            operand: (scoped_identifier
+              (identifier))))))))
 
 ================================================================================
 Do-while loop
@@ -363,15 +449,20 @@ void f() {
 
 (script
   (func_declaration
-    return_type: (type (datatype (primitive_type)))
+    return_type: (type
+      (datatype
+        (primitive_type)))
     name: (identifier)
     parameters: (parameter_list)
     body: (statement_block
       (do_while_statement
         body: (statement_block
-          (expression_statement (identifier)))
+          (expression_statement
+            (scoped_identifier
+              (identifier))))
         (binary_expression
-          left: (identifier)
+          left: (scoped_identifier
+            (identifier))
           right: (number_literal))))))
 
 ================================================================================
@@ -395,22 +486,31 @@ void f() {
 
 (script
   (func_declaration
-    return_type: (type (datatype (primitive_type)))
+    return_type: (type
+      (datatype
+        (primitive_type)))
     name: (identifier)
     parameters: (parameter_list)
     body: (statement_block
       (switch_statement
-        (identifier)
+        (scoped_identifier
+          (identifier))
         (case_clause
           (number_literal)
-          (expression_statement (identifier))
+          (expression_statement
+            (scoped_identifier
+              (identifier)))
           (break_statement))
         (case_clause
           (number_literal)
-          (expression_statement (identifier))
+          (expression_statement
+            (scoped_identifier
+              (identifier)))
           (break_statement))
         (case_clause
-          (expression_statement (identifier)))))))
+          (expression_statement
+            (scoped_identifier
+              (identifier))))))))
 
 ================================================================================
 Switch with fallthrough
@@ -431,20 +531,27 @@ void f() {
 
 (script
   (func_declaration
-    return_type: (type (datatype (primitive_type)))
+    return_type: (type
+      (datatype
+        (primitive_type)))
     name: (identifier)
     parameters: (parameter_list)
     body: (statement_block
       (switch_statement
-        (identifier)
+        (scoped_identifier
+          (identifier))
         (case_clause
           (number_literal))
         (case_clause
           (number_literal)
-          (expression_statement (identifier))
+          (expression_statement
+            (scoped_identifier
+              (identifier)))
           (break_statement))
         (case_clause
-          (expression_statement (identifier)))))))
+          (expression_statement
+            (scoped_identifier
+              (identifier))))))))
 
 ================================================================================
 Try-catch statement
@@ -462,15 +569,21 @@ void f() {
 
 (script
   (func_declaration
-    return_type: (type (datatype (primitive_type)))
+    return_type: (type
+      (datatype
+        (primitive_type)))
     name: (identifier)
     parameters: (parameter_list)
     body: (statement_block
       (try_statement
         (statement_block
-          (expression_statement (identifier)))
+          (expression_statement
+            (scoped_identifier
+              (identifier))))
         (statement_block
-          (expression_statement (identifier)))))))
+          (expression_statement
+            (scoped_identifier
+              (identifier))))))))
 
 ================================================================================
 Return with expression
@@ -484,11 +597,14 @@ void f() {
 
 (script
   (func_declaration
-    return_type: (type (datatype (primitive_type)))
+    return_type: (type
+      (datatype
+        (primitive_type)))
     name: (identifier)
     parameters: (parameter_list)
     body: (statement_block
-      (return_statement (number_literal)))))
+      (return_statement
+        (number_literal)))))
 
 ================================================================================
 Return void
@@ -502,7 +618,9 @@ void f() {
 
 (script
   (func_declaration
-    return_type: (type (datatype (primitive_type)))
+    return_type: (type
+      (datatype
+        (primitive_type)))
     name: (identifier)
     parameters: (parameter_list)
     body: (statement_block
@@ -523,7 +641,9 @@ void f() {
 
 (script
   (func_declaration
-    return_type: (type (datatype (primitive_type)))
+    return_type: (type
+      (datatype
+        (primitive_type)))
     name: (identifier)
     parameters: (parameter_list)
     body: (statement_block
@@ -531,7 +651,8 @@ void f() {
         (boolean_literal)
         body: (statement_block
           (if_statement
-            (identifier)
+            (scoped_identifier
+              (identifier))
             consequence: (break_statement))
           (continue_statement))))))
 
@@ -551,13 +672,17 @@ void f() {
 
 (script
   (func_declaration
-    return_type: (type (datatype (primitive_type)))
+    return_type: (type
+      (datatype
+        (primitive_type)))
     name: (identifier)
     parameters: (parameter_list)
     body: (statement_block
       (statement_block
         (statement_block
-          (expression_statement (identifier)))))))
+          (expression_statement
+            (scoped_identifier
+              (identifier))))))))
 
 ================================================================================
 Expression statement with function call
@@ -572,18 +697,24 @@ void f() {
 
 (script
   (func_declaration
-    return_type: (type (datatype (primitive_type)))
+    return_type: (type
+      (datatype
+        (primitive_type)))
     name: (identifier)
     parameters: (parameter_list)
     body: (statement_block
       (expression_statement
         (call_expression
-          function: (identifier)
+          function: (scoped_identifier
+            (identifier))
           arguments: (argument_list)))
       (expression_statement
         (call_expression
-          function: (identifier)
-          arguments: (argument_list (number_literal) (number_literal)))))))
+          function: (scoped_identifier
+            (identifier))
+          arguments: (argument_list
+            (number_literal)
+            (number_literal)))))))
 
 ================================================================================
 Expression statement with member access
@@ -598,20 +729,24 @@ void f() {
 
 (script
   (func_declaration
-    return_type: (type (datatype (primitive_type)))
+    return_type: (type
+      (datatype
+        (primitive_type)))
     name: (identifier)
     parameters: (parameter_list)
     body: (statement_block
       (expression_statement
         (call_expression
           function: (member_expression
-            object: (identifier)
+            object: (scoped_identifier
+              (identifier))
             member: (identifier))
           arguments: (argument_list)))
       (expression_statement
         (member_expression
           object: (member_expression
-            object: (identifier)
+            object: (scoped_identifier
+              (identifier))
             member: (identifier))
           member: (identifier))))))
 
@@ -628,14 +763,20 @@ void f() {
 
 (script
   (func_declaration
-    return_type: (type (datatype (primitive_type)))
+    return_type: (type
+      (datatype
+        (primitive_type)))
     name: (identifier)
     parameters: (parameter_list)
     body: (statement_block
       (expression_statement
-        (postfix_expression operand: (identifier)))
+        (postfix_expression
+          operand: (scoped_identifier
+            (identifier))))
       (expression_statement
-        (postfix_expression operand: (identifier))))))
+        (postfix_expression
+          operand: (scoped_identifier
+            (identifier)))))))
 
 ================================================================================
 Expression statement with assignment
@@ -650,17 +791,21 @@ void f() {
 
 (script
   (func_declaration
-    return_type: (type (datatype (primitive_type)))
+    return_type: (type
+      (datatype
+        (primitive_type)))
     name: (identifier)
     parameters: (parameter_list)
     body: (statement_block
       (expression_statement
         (assignment_expression
-          left: (identifier)
+          left: (scoped_identifier
+            (identifier))
           right: (number_literal)))
       (expression_statement
         (assignment_expression
-          left: (identifier)
+          left: (scoped_identifier
+            (identifier))
           right: (number_literal))))))
 
 ================================================================================
@@ -676,7 +821,9 @@ void f() {
 
 (script
   (func_declaration
-    return_type: (type (datatype (primitive_type)))
+    return_type: (type
+      (datatype
+        (primitive_type)))
     name: (identifier)
     parameters: (parameter_list)
     body: (statement_block)))
@@ -695,22 +842,29 @@ void f() {
 
 (script
   (func_declaration
-    return_type: (type (datatype (primitive_type)))
+    return_type: (type
+      (datatype
+        (primitive_type)))
     name: (identifier)
     parameters: (parameter_list)
     body: (statement_block
       (variable_declaration
-        var_type: (type (datatype (primitive_type)))
+        var_type: (type
+          (datatype
+            (primitive_type)))
         (variable_declarator
           name: (identifier)
           (boolean_literal)))
       (variable_declaration
-        var_type: (type (datatype (primitive_type)))
+        var_type: (type
+          (datatype
+            (primitive_type)))
         (variable_declarator
           name: (identifier)
           (boolean_literal)))
       (variable_declaration
-        var_type: (type (datatype))
+        var_type: (type
+          (datatype))
         (variable_declarator
           name: (identifier)
           (null_literal))))))

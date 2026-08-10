@@ -10,14 +10,18 @@ void f() {
 
 (script
   (func_declaration
-    return_type: (type (datatype (primitive_type)))
+    return_type: (type
+      (datatype
+        (primitive_type)))
     name: (identifier)
     parameters: (parameter_list)
     body: (statement_block
       (expression_statement
         (binary_expression
-          left: (identifier)
-          right: (identifier))))))
+          left: (scoped_identifier
+            (identifier))
+          right: (scoped_identifier
+            (identifier)))))))
 
 ================================================================================
 Binary multiplication binds tighter than addition
@@ -31,16 +35,21 @@ void f() {
 
 (script
   (func_declaration
-    return_type: (type (datatype (primitive_type)))
+    return_type: (type
+      (datatype
+        (primitive_type)))
     name: (identifier)
     parameters: (parameter_list)
     body: (statement_block
       (expression_statement
         (binary_expression
-          left: (identifier)
+          left: (scoped_identifier
+            (identifier))
           right: (binary_expression
-            left: (identifier)
-            right: (identifier)))))))
+            left: (scoped_identifier
+              (identifier))
+            right: (scoped_identifier
+              (identifier))))))))
 
 ================================================================================
 Exponentiation operator (right-associative)
@@ -54,16 +63,21 @@ void f() {
 
 (script
   (func_declaration
-    return_type: (type (datatype (primitive_type)))
+    return_type: (type
+      (datatype
+        (primitive_type)))
     name: (identifier)
     parameters: (parameter_list)
     body: (statement_block
       (expression_statement
         (binary_expression
-          left: (identifier)
+          left: (scoped_identifier
+            (identifier))
           right: (binary_expression
-            left: (identifier)
-            right: (identifier)))))))
+            left: (scoped_identifier
+              (identifier))
+            right: (scoped_identifier
+              (identifier))))))))
 
 ================================================================================
 Exponentiation binds tighter than multiplication
@@ -77,7 +91,9 @@ void f() {
 
 (script
   (func_declaration
-    return_type: (type (datatype (primitive_type)))
+    return_type: (type
+      (datatype
+        (primitive_type)))
     name: (identifier)
     parameters: (parameter_list)
     body: (statement_block
@@ -85,10 +101,14 @@ void f() {
         (binary_expression
           left: (binary_expression
             left: (binary_expression
-              left: (identifier)
-              right: (identifier))
-            right: (identifier))
-          right: (identifier))))))
+              left: (scoped_identifier
+                (identifier))
+              right: (scoped_identifier
+                (identifier)))
+            right: (scoped_identifier
+              (identifier)))
+          right: (scoped_identifier
+            (identifier)))))))
 
 ================================================================================
 Logical XOR operator (^^)
@@ -102,14 +122,18 @@ void f() {
 
 (script
   (func_declaration
-    return_type: (type (datatype (primitive_type)))
+    return_type: (type
+      (datatype
+        (primitive_type)))
     name: (identifier)
     parameters: (parameter_list)
     body: (statement_block
       (expression_statement
         (binary_expression
-          left: (identifier)
-          right: (identifier))))))
+          left: (scoped_identifier
+            (identifier))
+          right: (scoped_identifier
+            (identifier)))))))
 
 ================================================================================
 Keyword logical operators (and, or, xor)
@@ -125,22 +149,30 @@ void f() {
 
 (script
   (func_declaration
-    return_type: (type (datatype (primitive_type)))
+    return_type: (type
+      (datatype
+        (primitive_type)))
     name: (identifier)
     parameters: (parameter_list)
     body: (statement_block
       (expression_statement
         (binary_expression
-          left: (identifier)
-          right: (identifier)))
+          left: (scoped_identifier
+            (identifier))
+          right: (scoped_identifier
+            (identifier))))
       (expression_statement
         (binary_expression
-          left: (identifier)
-          right: (identifier)))
+          left: (scoped_identifier
+            (identifier))
+          right: (scoped_identifier
+            (identifier))))
       (expression_statement
         (binary_expression
-          left: (identifier)
-          right: (identifier))))))
+          left: (scoped_identifier
+            (identifier))
+          right: (scoped_identifier
+            (identifier)))))))
 
 ================================================================================
 Identity operators (is, !is)
@@ -155,18 +187,24 @@ void f() {
 
 (script
   (func_declaration
-    return_type: (type (datatype (primitive_type)))
+    return_type: (type
+      (datatype
+        (primitive_type)))
     name: (identifier)
     parameters: (parameter_list)
     body: (statement_block
       (expression_statement
         (binary_expression
-          left: (identifier)
-          right: (identifier)))
+          left: (scoped_identifier
+            (identifier))
+          right: (scoped_identifier
+            (identifier))))
       (expression_statement
         (binary_expression
-          left: (identifier)
-          right: (identifier))))))
+          left: (scoped_identifier
+            (identifier))
+          right: (scoped_identifier
+            (identifier)))))))
 
 ================================================================================
 Shift operators
@@ -182,22 +220,30 @@ void f() {
 
 (script
   (func_declaration
-    return_type: (type (datatype (primitive_type)))
+    return_type: (type
+      (datatype
+        (primitive_type)))
     name: (identifier)
     parameters: (parameter_list)
     body: (statement_block
       (expression_statement
         (binary_expression
-          left: (identifier)
-          right: (identifier)))
+          left: (scoped_identifier
+            (identifier))
+          right: (scoped_identifier
+            (identifier))))
       (expression_statement
         (binary_expression
-          left: (identifier)
-          right: (identifier)))
+          left: (scoped_identifier
+            (identifier))
+          right: (scoped_identifier
+            (identifier))))
       (expression_statement
         (binary_expression
-          left: (identifier)
-          right: (identifier))))))
+          left: (scoped_identifier
+            (identifier))
+          right: (scoped_identifier
+            (identifier)))))))
 
 ================================================================================
 Bitwise operators
@@ -213,22 +259,58 @@ void f() {
 
 (script
   (func_declaration
-    return_type: (type (datatype (primitive_type)))
+    return_type: (type
+      (datatype
+        (primitive_type)))
     name: (identifier)
     parameters: (parameter_list)
     body: (statement_block
       (expression_statement
         (binary_expression
-          left: (identifier)
-          right: (identifier)))
+          left: (scoped_identifier
+            (identifier))
+          right: (scoped_identifier
+            (identifier))))
       (expression_statement
         (binary_expression
-          left: (identifier)
-          right: (identifier)))
+          left: (scoped_identifier
+            (identifier))
+          right: (scoped_identifier
+            (identifier))))
       (expression_statement
         (binary_expression
-          left: (identifier)
-          right: (identifier))))))
+          left: (scoped_identifier
+            (identifier))
+          right: (scoped_identifier
+            (identifier)))))))
+
+================================================================================
+Bitwise AND binds tighter than equality (AngelScript, unlike C)
+================================================================================
+
+void f() {
+  a & b == c;
+}
+
+--------------------------------------------------------------------------------
+
+(script
+  (func_declaration
+    return_type: (type
+      (datatype
+        (primitive_type)))
+    name: (identifier)
+    parameters: (parameter_list)
+    body: (statement_block
+      (expression_statement
+        (binary_expression
+          left: (binary_expression
+            left: (scoped_identifier
+              (identifier))
+            right: (scoped_identifier
+              (identifier)))
+          right: (scoped_identifier
+            (identifier)))))))
 
 ================================================================================
 Assignment expression (right-associative)
@@ -242,16 +324,21 @@ void f() {
 
 (script
   (func_declaration
-    return_type: (type (datatype (primitive_type)))
+    return_type: (type
+      (datatype
+        (primitive_type)))
     name: (identifier)
     parameters: (parameter_list)
     body: (statement_block
       (expression_statement
         (assignment_expression
-          left: (identifier)
+          left: (scoped_identifier
+            (identifier))
           right: (assignment_expression
-            left: (identifier)
-            right: (identifier)))))))
+            left: (scoped_identifier
+              (identifier))
+            right: (scoped_identifier
+              (identifier))))))))
 
 ================================================================================
 Compound assignment operators
@@ -276,34 +363,84 @@ void f() {
 
 (script
   (func_declaration
-    return_type: (type (datatype (primitive_type)))
+    return_type: (type
+      (datatype
+        (primitive_type)))
     name: (identifier)
     parameters: (parameter_list)
     body: (statement_block
       (expression_statement
-        (assignment_expression left: (identifier) right: (identifier)))
+        (assignment_expression
+          left: (scoped_identifier
+            (identifier))
+          right: (scoped_identifier
+            (identifier))))
       (expression_statement
-        (assignment_expression left: (identifier) right: (identifier)))
+        (assignment_expression
+          left: (scoped_identifier
+            (identifier))
+          right: (scoped_identifier
+            (identifier))))
       (expression_statement
-        (assignment_expression left: (identifier) right: (identifier)))
+        (assignment_expression
+          left: (scoped_identifier
+            (identifier))
+          right: (scoped_identifier
+            (identifier))))
       (expression_statement
-        (assignment_expression left: (identifier) right: (identifier)))
+        (assignment_expression
+          left: (scoped_identifier
+            (identifier))
+          right: (scoped_identifier
+            (identifier))))
       (expression_statement
-        (assignment_expression left: (identifier) right: (identifier)))
+        (assignment_expression
+          left: (scoped_identifier
+            (identifier))
+          right: (scoped_identifier
+            (identifier))))
       (expression_statement
-        (assignment_expression left: (identifier) right: (identifier)))
+        (assignment_expression
+          left: (scoped_identifier
+            (identifier))
+          right: (scoped_identifier
+            (identifier))))
       (expression_statement
-        (assignment_expression left: (identifier) right: (identifier)))
+        (assignment_expression
+          left: (scoped_identifier
+            (identifier))
+          right: (scoped_identifier
+            (identifier))))
       (expression_statement
-        (assignment_expression left: (identifier) right: (identifier)))
+        (assignment_expression
+          left: (scoped_identifier
+            (identifier))
+          right: (scoped_identifier
+            (identifier))))
       (expression_statement
-        (assignment_expression left: (identifier) right: (identifier)))
+        (assignment_expression
+          left: (scoped_identifier
+            (identifier))
+          right: (scoped_identifier
+            (identifier))))
       (expression_statement
-        (assignment_expression left: (identifier) right: (identifier)))
+        (assignment_expression
+          left: (scoped_identifier
+            (identifier))
+          right: (scoped_identifier
+            (identifier))))
       (expression_statement
-        (assignment_expression left: (identifier) right: (identifier)))
+        (assignment_expression
+          left: (scoped_identifier
+            (identifier))
+          right: (scoped_identifier
+            (identifier))))
       (expression_statement
-        (assignment_expression left: (identifier) right: (identifier))))))
+        (assignment_expression
+          left: (scoped_identifier
+            (identifier))
+          right: (scoped_identifier
+            (identifier)))))))
 
 ================================================================================
 Ternary expression
@@ -317,15 +454,20 @@ void f() {
 
 (script
   (func_declaration
-    return_type: (type (datatype (primitive_type)))
+    return_type: (type
+      (datatype
+        (primitive_type)))
     name: (identifier)
     parameters: (parameter_list)
     body: (statement_block
       (expression_statement
         (ternary_expression
-          condition: (identifier)
-          consequence: (identifier)
-          alternative: (identifier))))))
+          condition: (scoped_identifier
+            (identifier))
+          consequence: (scoped_identifier
+            (identifier))
+          alternative: (scoped_identifier
+            (identifier)))))))
 
 ================================================================================
 Nested ternary expression (right-associative)
@@ -339,18 +481,25 @@ void f() {
 
 (script
   (func_declaration
-    return_type: (type (datatype (primitive_type)))
+    return_type: (type
+      (datatype
+        (primitive_type)))
     name: (identifier)
     parameters: (parameter_list)
     body: (statement_block
       (expression_statement
         (ternary_expression
-          condition: (identifier)
+          condition: (scoped_identifier
+            (identifier))
           consequence: (ternary_expression
-            condition: (identifier)
-            consequence: (identifier)
-            alternative: (identifier))
-          alternative: (identifier))))))
+            condition: (scoped_identifier
+              (identifier))
+            consequence: (scoped_identifier
+              (identifier))
+            alternative: (scoped_identifier
+              (identifier)))
+          alternative: (scoped_identifier
+            (identifier)))))))
 
 ================================================================================
 Unary prefix operators
@@ -367,18 +516,58 @@ void f() {
 
 (script
   (func_declaration
-    return_type: (type (datatype (primitive_type)))
+    return_type: (type
+      (datatype
+        (primitive_type)))
     name: (identifier)
     parameters: (parameter_list)
     body: (statement_block
       (expression_statement
-        (unary_expression operand: (identifier)))
+        (unary_expression
+          operand: (scoped_identifier
+            (identifier))))
       (expression_statement
-        (unary_expression operand: (identifier)))
+        (unary_expression
+          operand: (scoped_identifier
+            (identifier))))
       (expression_statement
-        (unary_expression operand: (identifier)))
+        (unary_expression
+          operand: (scoped_identifier
+            (identifier))))
       (expression_statement
-        (unary_expression operand: (identifier))))))
+        (unary_expression
+          operand: (scoped_identifier
+            (identifier)))))))
+
+================================================================================
+Keyword form of logical not ('not')
+================================================================================
+
+void f() {
+  if( a and b or not c ) {}
+}
+
+--------------------------------------------------------------------------------
+
+(script
+  (func_declaration
+    return_type: (type
+      (datatype
+        (primitive_type)))
+    name: (identifier)
+    parameters: (parameter_list)
+    body: (statement_block
+      (if_statement
+        (binary_expression
+          left: (binary_expression
+            left: (scoped_identifier
+              (identifier))
+            right: (scoped_identifier
+              (identifier)))
+          right: (unary_expression
+            operand: (scoped_identifier
+              (identifier))))
+        consequence: (statement_block)))))
 
 ================================================================================
 Handle-of operator (@)
@@ -393,16 +582,21 @@ void f() {
 
 (script
   (func_declaration
-    return_type: (type (datatype (primitive_type)))
+    return_type: (type
+      (datatype
+        (primitive_type)))
     name: (identifier)
     parameters: (parameter_list)
     body: (statement_block
       (expression_statement
-        (unary_expression operand: (identifier)))
+        (unary_expression
+          operand: (scoped_identifier
+            (identifier))))
       (expression_statement
         (unary_expression
           operand: (member_expression
-            object: (identifier)
+            object: (scoped_identifier
+              (identifier))
             member: (identifier)))))))
 
 ================================================================================
@@ -418,14 +612,20 @@ void f() {
 
 (script
   (func_declaration
-    return_type: (type (datatype (primitive_type)))
+    return_type: (type
+      (datatype
+        (primitive_type)))
     name: (identifier)
     parameters: (parameter_list)
     body: (statement_block
       (expression_statement
-        (unary_expression operand: (identifier)))
+        (unary_expression
+          operand: (scoped_identifier
+            (identifier))))
       (expression_statement
-        (unary_expression operand: (identifier))))))
+        (unary_expression
+          operand: (scoped_identifier
+            (identifier)))))))
 
 ================================================================================
 Postfix increment/decrement
@@ -440,14 +640,20 @@ void f() {
 
 (script
   (func_declaration
-    return_type: (type (datatype (primitive_type)))
+    return_type: (type
+      (datatype
+        (primitive_type)))
     name: (identifier)
     parameters: (parameter_list)
     body: (statement_block
       (expression_statement
-        (postfix_expression operand: (identifier)))
+        (postfix_expression
+          operand: (scoped_identifier
+            (identifier))))
       (expression_statement
-        (postfix_expression operand: (identifier))))))
+        (postfix_expression
+          operand: (scoped_identifier
+            (identifier)))))))
 
 ================================================================================
 Member access
@@ -462,16 +668,22 @@ void f() {
 
 (script
   (func_declaration
-    return_type: (type (datatype (primitive_type)))
+    return_type: (type
+      (datatype
+        (primitive_type)))
     name: (identifier)
     parameters: (parameter_list)
     body: (statement_block
       (expression_statement
-        (member_expression object: (identifier) member: (identifier)))
+        (member_expression
+          object: (scoped_identifier
+            (identifier))
+          member: (identifier)))
       (expression_statement
         (member_expression
           object: (member_expression
-            object: (identifier)
+            object: (scoped_identifier
+              (identifier))
             member: (identifier))
           member: (identifier))))))
 
@@ -488,20 +700,26 @@ void f() {
 
 (script
   (func_declaration
-    return_type: (type (datatype (primitive_type)))
+    return_type: (type
+      (datatype
+        (primitive_type)))
     name: (identifier)
     parameters: (parameter_list)
     body: (statement_block
       (expression_statement
         (index_expression
-          object: (identifier)
+          object: (scoped_identifier
+            (identifier))
           index: (number_literal)))
       (expression_statement
         (index_expression
-          object: (identifier)
+          object: (scoped_identifier
+            (identifier))
           index: (binary_expression
-            left: (identifier)
-            right: (identifier)))))))
+            left: (scoped_identifier
+              (identifier))
+            right: (scoped_identifier
+              (identifier))))))))
 
 ================================================================================
 Named indexing
@@ -516,22 +734,29 @@ void f() {
 
 (script
   (func_declaration
-    return_type: (type (datatype (primitive_type)))
+    return_type: (type
+      (datatype
+        (primitive_type)))
     name: (identifier)
     parameters: (parameter_list)
     body: (statement_block
       (expression_statement
         (index_expression
-          object: (identifier)
+          object: (scoped_identifier
+            (identifier))
           index_name: (identifier)
-          index: (identifier)))
+          index: (scoped_identifier
+            (identifier))))
       (expression_statement
         (index_expression
-          object: (identifier)
+          object: (scoped_identifier
+            (identifier))
           index_name: (identifier)
-          index: (identifier)
+          index: (scoped_identifier
+            (identifier))
           index_name: (identifier)
-          index: (identifier))))))
+          index: (scoped_identifier
+            (identifier)))))))
 
 ================================================================================
 Function call
@@ -546,17 +771,21 @@ void f() {
 
 (script
   (func_declaration
-    return_type: (type (datatype (primitive_type)))
+    return_type: (type
+      (datatype
+        (primitive_type)))
     name: (identifier)
     parameters: (parameter_list)
     body: (statement_block
       (expression_statement
         (call_expression
-          function: (identifier)
+          function: (scoped_identifier
+            (identifier))
           arguments: (argument_list)))
       (expression_statement
         (call_expression
-          function: (identifier)
+          function: (scoped_identifier
+            (identifier))
           arguments: (argument_list
             (number_literal)
             (number_literal)
@@ -574,13 +803,16 @@ void f() {
 
 (script
   (func_declaration
-    return_type: (type (datatype (primitive_type)))
+    return_type: (type
+      (datatype
+        (primitive_type)))
     name: (identifier)
     parameters: (parameter_list)
     body: (statement_block
       (expression_statement
         (call_expression
-          function: (identifier)
+          function: (scoped_identifier
+            (identifier))
           arguments: (argument_list
             arg_name: (identifier)
             (number_literal)
@@ -600,21 +832,25 @@ void f() {
 
 (script
   (func_declaration
-    return_type: (type (datatype (primitive_type)))
+    return_type: (type
+      (datatype
+        (primitive_type)))
     name: (identifier)
     parameters: (parameter_list)
     body: (statement_block
       (expression_statement
         (call_expression
           function: (member_expression
-            object: (identifier)
+            object: (scoped_identifier
+              (identifier))
             member: (identifier))
           arguments: (argument_list)))
       (expression_statement
         (call_expression
           function: (member_expression
             object: (member_expression
-              object: (identifier)
+              object: (scoped_identifier
+                (identifier))
               member: (identifier))
             member: (identifier))
           arguments: (argument_list
@@ -632,14 +868,19 @@ void f() {
 
 (script
   (func_declaration
-    return_type: (type (datatype (primitive_type)))
+    return_type: (type
+      (datatype
+        (primitive_type)))
     name: (identifier)
     parameters: (parameter_list)
     body: (statement_block
       (expression_statement
         (cast_expression
-          type: (type (datatype (primitive_type)))
-          value: (identifier))))))
+          type: (type
+            (datatype
+              (primitive_type)))
+          value: (scoped_identifier
+            (identifier)))))))
 
 ================================================================================
 Lambda expression (no params)
@@ -653,13 +894,15 @@ void f() {
 
 (script
   (func_declaration
-    return_type: (type (datatype (primitive_type)))
+    return_type: (type
+      (datatype
+        (primitive_type)))
     name: (identifier)
     parameters: (parameter_list)
     body: (statement_block
       (expression_statement
         (lambda_expression
-          parameters: (parameter_list)
+          parameters: (lambda_parameter_list)
           body: (statement_block))))))
 
 ================================================================================
@@ -674,24 +917,30 @@ void f() {
 
 (script
   (func_declaration
-    return_type: (type (datatype (primitive_type)))
+    return_type: (type
+      (datatype
+        (primitive_type)))
     name: (identifier)
     parameters: (parameter_list)
     body: (statement_block
       (expression_statement
         (lambda_expression
-          parameters: (parameter_list
-            (parameter
-              param_type: (type (datatype (primitive_type)))
-              name: (identifier))
-            (parameter
-              param_type: (type (datatype (primitive_type)))
-              name: (identifier)))
+          parameters: (lambda_parameter_list
+            param_type: (type
+              (datatype
+                (primitive_type)))
+            name: (identifier)
+            param_type: (type
+              (datatype
+                (primitive_type)))
+            name: (identifier))
           body: (statement_block
             (return_statement
               (binary_expression
-                left: (identifier)
-                right: (identifier)))))))))
+                left: (scoped_identifier
+                  (identifier))
+                right: (scoped_identifier
+                  (identifier))))))))))
 
 ================================================================================
 Lambda as argument
@@ -705,27 +954,34 @@ void f() {
 
 (script
   (func_declaration
-    return_type: (type (datatype (primitive_type)))
+    return_type: (type
+      (datatype
+        (primitive_type)))
     name: (identifier)
     parameters: (parameter_list)
     body: (statement_block
       (expression_statement
         (call_expression
-          function: (identifier)
+          function: (scoped_identifier
+            (identifier))
           arguments: (argument_list
             (lambda_expression
-              parameters: (parameter_list
-                (parameter
-                  param_type: (type (datatype (primitive_type)))
-                  name: (identifier))
-                (parameter
-                  param_type: (type (datatype (primitive_type)))
-                  name: (identifier)))
+              parameters: (lambda_parameter_list
+                param_type: (type
+                  (datatype
+                    (primitive_type)))
+                name: (identifier)
+                param_type: (type
+                  (datatype
+                    (primitive_type)))
+                name: (identifier))
               body: (statement_block
                 (return_statement
                   (binary_expression
-                    left: (identifier)
-                    right: (identifier)))))))))))
+                    left: (scoped_identifier
+                      (identifier))
+                    right: (scoped_identifier
+                      (identifier))))))))))))
 
 ================================================================================
 Initializer list
@@ -739,12 +995,16 @@ void f() {
 
 (script
   (func_declaration
-    return_type: (type (datatype (primitive_type)))
+    return_type: (type
+      (datatype
+        (primitive_type)))
     name: (identifier)
     parameters: (parameter_list)
     body: (statement_block
       (variable_declaration
-        var_type: (type (datatype (primitive_type)))
+        var_type: (type
+          (datatype
+            (primitive_type)))
         (variable_declarator
           name: (identifier)
           (initializer_list
@@ -764,12 +1024,15 @@ void f() {
 
 (script
   (func_declaration
-    return_type: (type (datatype (primitive_type)))
+    return_type: (type
+      (datatype
+        (primitive_type)))
     name: (identifier)
     parameters: (parameter_list)
     body: (statement_block
       (variable_declaration
-        var_type: (type (datatype))
+        var_type: (type
+          (datatype))
         (variable_declarator
           name: (identifier)
           (initializer_list
@@ -792,7 +1055,9 @@ void f() {
 
 (script
   (func_declaration
-    return_type: (type (datatype (primitive_type)))
+    return_type: (type
+      (datatype
+        (primitive_type)))
     name: (identifier)
     parameters: (parameter_list)
     body: (statement_block
@@ -800,9 +1065,12 @@ void f() {
         (binary_expression
           left: (parenthesized_expression
             (binary_expression
-              left: (identifier)
-              right: (identifier)))
-          right: (identifier))))))
+              left: (scoped_identifier
+                (identifier))
+              right: (scoped_identifier
+                (identifier))))
+          right: (scoped_identifier
+            (identifier)))))))
 
 ================================================================================
 Chained postfix operations
@@ -816,7 +1084,9 @@ void f() {
 
 (script
   (func_declaration
-    return_type: (type (datatype (primitive_type)))
+    return_type: (type
+      (datatype
+        (primitive_type)))
     name: (identifier)
     parameters: (parameter_list)
     body: (statement_block
@@ -825,11 +1095,13 @@ void f() {
           object: (call_expression
             function: (index_expression
               object: (member_expression
-                object: (identifier)
+                object: (scoped_identifier
+                  (identifier))
                 member: (identifier))
               index: (number_literal))
             arguments: (argument_list
-              (identifier)))
+              (scoped_identifier
+                (identifier))))
           member: (identifier))))))
 
 ================================================================================
@@ -844,16 +1116,20 @@ void f() {
 
 (script
   (func_declaration
-    return_type: (type (datatype (primitive_type)))
+    return_type: (type
+      (datatype
+        (primitive_type)))
     name: (identifier)
     parameters: (parameter_list)
     body: (statement_block
       (expression_statement
         (assignment_expression
           left: (member_expression
-            object: (identifier)
+            object: (scoped_identifier
+              (identifier))
             member: (identifier))
-          right: (identifier))))))
+          right: (scoped_identifier
+            (identifier)))))))
 
 ================================================================================
 Logical operator precedence: and binds tighter than or
@@ -867,16 +1143,21 @@ void f() {
 
 (script
   (func_declaration
-    return_type: (type (datatype (primitive_type)))
+    return_type: (type
+      (datatype
+        (primitive_type)))
     name: (identifier)
     parameters: (parameter_list)
     body: (statement_block
       (expression_statement
         (binary_expression
-          left: (identifier)
+          left: (scoped_identifier
+            (identifier))
           right: (binary_expression
-            left: (identifier)
-            right: (identifier)))))))
+            left: (scoped_identifier
+              (identifier))
+            right: (scoped_identifier
+              (identifier))))))))
 
 ================================================================================
 Comparison operators
@@ -895,22 +1176,48 @@ void f() {
 
 (script
   (func_declaration
-    return_type: (type (datatype (primitive_type)))
+    return_type: (type
+      (datatype
+        (primitive_type)))
     name: (identifier)
     parameters: (parameter_list)
     body: (statement_block
       (expression_statement
-        (binary_expression left: (identifier) right: (identifier)))
+        (binary_expression
+          left: (scoped_identifier
+            (identifier))
+          right: (scoped_identifier
+            (identifier))))
       (expression_statement
-        (binary_expression left: (identifier) right: (identifier)))
+        (binary_expression
+          left: (scoped_identifier
+            (identifier))
+          right: (scoped_identifier
+            (identifier))))
       (expression_statement
-        (binary_expression left: (identifier) right: (identifier)))
+        (binary_expression
+          left: (scoped_identifier
+            (identifier))
+          right: (scoped_identifier
+            (identifier))))
       (expression_statement
-        (binary_expression left: (identifier) right: (identifier)))
+        (binary_expression
+          left: (scoped_identifier
+            (identifier))
+          right: (scoped_identifier
+            (identifier))))
       (expression_statement
-        (binary_expression left: (identifier) right: (identifier)))
+        (binary_expression
+          left: (scoped_identifier
+            (identifier))
+          right: (scoped_identifier
+            (identifier))))
       (expression_statement
-        (binary_expression left: (identifier) right: (identifier))))))
+        (binary_expression
+          left: (scoped_identifier
+            (identifier))
+          right: (scoped_identifier
+            (identifier)))))))
 
 ================================================================================
 Number literals with base prefixes
@@ -930,17 +1237,26 @@ void f() {
 
 (script
   (func_declaration
-    return_type: (type (datatype (primitive_type)))
+    return_type: (type
+      (datatype
+        (primitive_type)))
     name: (identifier)
     parameters: (parameter_list)
     body: (statement_block
-      (expression_statement (number_literal))
-      (expression_statement (number_literal))
-      (expression_statement (number_literal))
-      (expression_statement (number_literal))
-      (expression_statement (number_literal))
-      (expression_statement (number_literal))
-      (expression_statement (number_literal)))))
+      (expression_statement
+        (number_literal))
+      (expression_statement
+        (number_literal))
+      (expression_statement
+        (number_literal))
+      (expression_statement
+        (number_literal))
+      (expression_statement
+        (number_literal))
+      (expression_statement
+        (number_literal))
+      (expression_statement
+        (number_literal)))))
 
 ================================================================================
 Handle assignment (@ prefix with =)
@@ -955,21 +1271,30 @@ void f() {
 
 (script
   (func_declaration
-    return_type: (type (datatype (primitive_type)))
+    return_type: (type
+      (datatype
+        (primitive_type)))
     name: (identifier)
     parameters: (parameter_list)
     body: (statement_block
       (expression_statement
         (assignment_expression
-          left: (unary_expression operand: (identifier))
-          right: (identifier)))
+          left: (unary_expression
+            operand: (scoped_identifier
+              (identifier)))
+          right: (scoped_identifier
+            (identifier))))
       (expression_statement
         (assignment_expression
-          left: (unary_expression operand: (identifier))
-          right: (unary_expression operand: (identifier)))))))
+          left: (unary_expression
+            operand: (scoped_identifier
+              (identifier)))
+          right: (unary_expression
+            operand: (scoped_identifier
+              (identifier))))))))
 
 ================================================================================
-Handle assignment operator (@=)
+Handle compound assignment (@=)
 ================================================================================
 
 void f() {
@@ -980,14 +1305,18 @@ void f() {
 
 (script
   (func_declaration
-    return_type: (type (datatype (primitive_type)))
+    return_type: (type
+      (datatype
+        (primitive_type)))
     name: (identifier)
     parameters: (parameter_list)
     body: (statement_block
       (expression_statement
         (assignment_expression
-          left: (identifier)
-          right: (identifier))))))
+          left: (scoped_identifier
+            (identifier))
+          right: (scoped_identifier
+            (identifier)))))))
 
 ================================================================================
 Null handle comparison (is null, !is null)
@@ -1002,17 +1331,100 @@ void f() {
 
 (script
   (func_declaration
-    return_type: (type (datatype (primitive_type)))
+    return_type: (type
+      (datatype
+        (primitive_type)))
     name: (identifier)
     parameters: (parameter_list)
     body: (statement_block
       (if_statement
         (binary_expression
-          left: (identifier)
+          left: (scoped_identifier
+            (identifier))
           right: (null_literal))
         consequence: (statement_block))
       (if_statement
         (binary_expression
-          left: (identifier)
+          left: (scoped_identifier
+            (identifier))
           right: (null_literal))
         consequence: (statement_block)))))
+
+================================================================================
+Scope resolution in expressions
+================================================================================
+
+void test() {
+  Math::abs(-5);
+  NS::MAX_VALUE;
+  ::value = value;
+}
+
+--------------------------------------------------------------------------------
+
+(script
+  (func_declaration
+    (type
+      (datatype
+        (primitive_type)))
+    (identifier)
+    (parameter_list)
+    (statement_block
+      (expression_statement
+        (call_expression
+          (scoped_identifier
+            (identifier)
+            (identifier))
+          (argument_list
+            (unary_expression
+              (number_literal)))))
+      (expression_statement
+        (scoped_identifier
+          (identifier)
+          (identifier)))
+      (expression_statement
+        (assignment_expression
+          (scoped_identifier
+            (identifier))
+          (scoped_identifier
+            (identifier)))))))
+
+================================================================================
+XOR and logical AND precedence
+================================================================================
+
+void test() {
+  if (a xor b == c) {}
+  if (a xor b and c) {}
+}
+
+--------------------------------------------------------------------------------
+
+(script
+  (func_declaration
+    (type
+      (datatype
+        (primitive_type)))
+    (identifier)
+    (parameter_list)
+    (statement_block
+      (if_statement
+        (binary_expression
+          (binary_expression
+            (scoped_identifier
+              (identifier))
+            (scoped_identifier
+              (identifier)))
+          (scoped_identifier
+            (identifier)))
+        (statement_block))
+      (if_statement
+        (binary_expression
+          (binary_expression
+            (scoped_identifier
+              (identifier))
+            (scoped_identifier
+              (identifier)))
+          (scoped_identifier
+            (identifier)))
+        (statement_block)))))

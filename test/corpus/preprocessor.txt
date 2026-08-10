@@ -11,8 +11,11 @@ int x;
 (script
   (preproc_directive)
   (variable_declaration
-    var_type: (type (datatype (primitive_type)))
-    (variable_declarator name: (identifier))))
+    var_type: (type
+      (datatype
+        (primitive_type)))
+    (variable_declarator
+      name: (identifier))))
 
 ==================
 Pragma and include between declarations
@@ -28,12 +31,18 @@ int b;
 (script
   (preproc_directive)
   (variable_declaration
-    var_type: (type (datatype (primitive_type)))
-    (variable_declarator name: (identifier)))
+    var_type: (type
+      (datatype
+        (primitive_type)))
+    (variable_declarator
+      name: (identifier)))
   (preproc_directive)
   (variable_declaration
-    var_type: (type (datatype (primitive_type)))
-    (variable_declarator name: (identifier))))
+    var_type: (type
+      (datatype
+        (primitive_type)))
+    (variable_declarator
+      name: (identifier))))
 
 ==================
 Conditional compilation around class members
@@ -54,12 +63,18 @@ class Foo {
     body: (class_body
       (preproc_directive)
       (variable_declaration
-        var_type: (type (datatype (primitive_type)))
-        (variable_declarator name: (identifier)))
+        var_type: (type
+          (datatype
+            (primitive_type)))
+        (variable_declarator
+          name: (identifier)))
       (preproc_directive)
       (variable_declaration
-        var_type: (type (datatype (primitive_type)))
-        (variable_declarator name: (identifier))))))
+        var_type: (type
+          (datatype
+            (primitive_type)))
+        (variable_declarator
+          name: (identifier))))))
 
 ==================
 Ifdef around statements in function body
@@ -75,14 +90,17 @@ void f() {
 
 (script
   (func_declaration
-    return_type: (type (datatype (primitive_type)))
+    return_type: (type
+      (datatype
+        (primitive_type)))
     name: (identifier)
     parameters: (parameter_list)
     body: (statement_block
       (preproc_directive)
       (expression_statement
         (call_expression
-          function: (identifier)
+          function: (scoped_identifier
+            (identifier))
           arguments: (argument_list)))
       (preproc_directive))))
 
@@ -106,13 +124,17 @@ class A {
     body: (class_body
       (preproc_directive)
       (func_declaration
-        return_type: (type (datatype (primitive_type)))
+        return_type: (type
+          (datatype
+            (primitive_type)))
         name: (identifier)
         parameters: (parameter_list)
         body: (statement_block))
       (preproc_directive)
       (func_declaration
-        return_type: (type (datatype (primitive_type)))
+        return_type: (type
+          (datatype
+            (primitive_type)))
         name: (identifier)
         parameters: (parameter_list)
         body: (statement_block))
@@ -134,7 +156,10 @@ int editorOnly;
   (preproc_directive)
   (preproc_directive)
   (variable_declaration
-    var_type: (type (datatype (primitive_type)))
-    (variable_declarator name: (identifier)))
+    var_type: (type
+      (datatype
+        (primitive_type)))
+    (variable_declarator
+      name: (identifier)))
   (preproc_directive)
   (preproc_directive))

@@ -8,11 +8,13 @@ array<int
 
 (script
   (ERROR
-    (identifier)
-    (template_type_list
-      (type
-        (datatype
-          (primitive_type))))))
+    (type
+      (datatype
+        (identifier))
+      (template_type_list
+        (type
+          (datatype
+            (primitive_type)))))))
 
 ==================
 Unclosed nested template at end of file
@@ -24,15 +26,17 @@ TArray<TArray<int
 
 (script
   (ERROR
-    (identifier)
-    (template_type_list
-      (type
-        (datatype
-          (identifier))
-        (template_type_list
-          (type
-            (datatype
-              (primitive_type))))))))
+    (type
+      (datatype
+        (identifier))
+      (template_type_list
+        (type
+          (datatype
+            (identifier))
+          (template_type_list
+            (type
+              (datatype
+                (primitive_type)))))))))
 
 ==================
 Unclosed template before call statement
@@ -98,7 +102,8 @@ void f() {
           (number_literal)))
       (expression_statement
         (assignment_expression
-          (identifier)
+          (scoped_identifier
+            (identifier))
           (number_literal))))))
 
 ==================
@@ -121,8 +126,10 @@ void f() {
     (statement_block
       (expression_statement
         (binary_expression
-          (identifier)
-          (identifier))))))
+          (scoped_identifier
+            (identifier))
+          (scoped_identifier
+            (identifier)))))))
 
 ==================
 Multi-line comparison in if condition
@@ -145,8 +152,10 @@ void f() {
     (statement_block
       (if_statement
         (binary_expression
-          (identifier)
-          (identifier))
+          (scoped_identifier
+            (identifier))
+          (scoped_identifier
+            (identifier)))
         (statement_block)))))
 
 ==================
@@ -175,8 +184,10 @@ void f() {
         (variable_declarator
           (identifier)
           (binary_expression
-            (identifier)
-            (identifier)))))))
+            (scoped_identifier
+              (identifier))
+            (scoped_identifier
+              (identifier))))))))
 
 ==================
 Multi-line template arguments after comma still parse
@@ -209,6 +220,86 @@ Incomplete cast at end of file
 
 void f() {
     x = cast<int
+
+---
+
+(script)
+
+==================
+Abstract modifier rejected on funcdef
+:error
+==================
+
+abstract funcdef void F();
+
+---
+
+(script)
+
+==================
+Final modifier rejected on enum
+:error
+==================
+
+final enum Foo { A };
+
+---
+
+(script)
+
+==================
+Abstract modifier rejected on interface
+:error
+==================
+
+abstract interface IFoo {};
+
+---
+
+(script)
+
+==================
+Typedef with user-defined type rejected
+:error
+==================
+
+typedef MyClass AliasName;
+
+---
+
+(script)
+
+==================
+Assignment missing right-hand side
+:error
+==================
+
+void f() {
+    int x = ;
+}
+
+---
+
+(script)
+
+==================
+Unclosed class body
+:error
+==================
+
+class Foo {
+    void f() {
+
+---
+
+(script)
+
+==================
+Abstract modifier rejected on function (leading position)
+:error
+==================
+
+abstract void Foo() {}
 
 ---
 
