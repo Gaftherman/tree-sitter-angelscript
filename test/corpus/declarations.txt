@@ -484,7 +484,7 @@ int x = 5;
         (primitive_type)))
     (variable_declarator
       name: (identifier)
-      (number_literal))))
+      value: (number_literal))))
 
 ==================
 Variable with constructor-style init
@@ -501,7 +501,7 @@ Foo obj(1, 2);
         (identifier)))
     (variable_declarator
       name: (identifier)
-      (argument_list
+      arguments: (argument_list
         (number_literal)
         (number_literal)))))
 
@@ -520,7 +520,7 @@ int x = {1, 2, 3};
         (primitive_type)))
     (variable_declarator
       name: (identifier)
-      (initializer_list
+      value: (initializer_list
         (number_literal)
         (number_literal)
         (number_literal)))))
@@ -540,7 +540,7 @@ const int MAX = 100;
         (primitive_type)))
     (variable_declarator
       name: (identifier)
-      (number_literal))))
+      value: (number_literal))))
 
 ==================
 Scoped type variable
@@ -607,7 +607,7 @@ auto x = 42;
       (datatype))
     (variable_declarator
       name: (identifier)
-      (number_literal))))
+      value: (number_literal))))
 
 ==================
 Multiple variable declarators
@@ -624,10 +624,10 @@ int a = 1, b = 2, c;
         (primitive_type)))
     (variable_declarator
       name: (identifier)
-      (number_literal))
+      value: (number_literal))
     (variable_declarator
       name: (identifier)
-      (number_literal))
+      value: (number_literal))
     (variable_declarator
       name: (identifier))))
 
@@ -646,11 +646,11 @@ Foo a(1), b(2, 3);
         (identifier)))
     (variable_declarator
       name: (identifier)
-      (argument_list
+      arguments: (argument_list
         (number_literal)))
     (variable_declarator
       name: (identifier)
-      (argument_list
+      arguments: (argument_list
         (number_literal)
         (number_literal)))))
 
@@ -669,12 +669,12 @@ int a = 1, b, c = 3;
         (primitive_type)))
     (variable_declarator
       name: (identifier)
-      (number_literal))
+      value: (number_literal))
     (variable_declarator
       name: (identifier))
     (variable_declarator
       name: (identifier)
-      (number_literal))))
+      value: (number_literal))))
 
 ==================
 Triple-quoted heredoc string
@@ -691,7 +691,7 @@ string s = """hello world""";
         (identifier)))
     (variable_declarator
       name: (identifier)
-      (string_literal))))
+      value: (string_literal))))
 
 ==================
 Mixin class with modifiers
@@ -782,4 +782,4 @@ Foo@ f = null;
         (identifier)))
     (variable_declarator
       name: (identifier)
-      (null_literal))))
+      value: (null_literal))))

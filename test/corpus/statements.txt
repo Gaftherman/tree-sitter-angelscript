@@ -151,7 +151,7 @@ void f() {
               (primitive_type)))
           (variable_declarator
             name: (identifier)
-            (number_literal)))
+            value: (number_literal)))
         condition: (expression_statement
           (binary_expression
             left: (scoped_identifier
@@ -192,7 +192,7 @@ void f() {
               (primitive_type)))
           (variable_declarator
             name: (identifier)
-            (number_literal)))
+            value: (number_literal)))
         condition: (expression_statement
           (binary_expression
             left: (scoped_identifier
@@ -854,17 +854,17 @@ void f() {
             (primitive_type)))
         (variable_declarator
           name: (identifier)
-          (boolean_literal)))
+          value: (boolean_literal)))
       (variable_declaration
         var_type: (type
           (datatype
             (primitive_type)))
         (variable_declarator
           name: (identifier)
-          (boolean_literal)))
+          value: (boolean_literal)))
       (variable_declaration
         var_type: (type
           (datatype))
         (variable_declarator
           name: (identifier)
-          (null_literal))))))
+          value: (null_literal))))))

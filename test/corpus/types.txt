@@ -286,7 +286,7 @@ void f() {
             (primitive_type)))
         (variable_declarator
           name: (identifier)
-          (binary_expression
+          value: (binary_expression
             left: (scoped_identifier
               (identifier))
             right: (scoped_identifier
@@ -316,7 +316,7 @@ void f() {
             (primitive_type)))
         (variable_declarator
           name: (identifier)
-          (binary_expression
+          value: (binary_expression
             left: (scoped_identifier
               (identifier))
             right: (scoped_identifier
@@ -348,7 +348,7 @@ void f() {
             (primitive_type)))
         (variable_declarator
           name: (identifier)
-          (binary_expression
+          value: (binary_expression
             left: (scoped_identifier
               (identifier))
             right: (number_literal))))
@@ -358,7 +358,7 @@ void f() {
             (primitive_type)))
         (variable_declarator
           name: (identifier)
-          (binary_expression
+          value: (binary_expression
             left: (scoped_identifier
               (identifier))
             right: (number_literal))))
@@ -368,7 +368,7 @@ void f() {
             (primitive_type)))
         (variable_declarator
           name: (identifier)
-          (binary_expression
+          value: (binary_expression
             left: (scoped_identifier
               (identifier))
             right: (number_literal)))))))
@@ -408,7 +408,7 @@ void f() {
             (primitive_type)))
         (variable_declarator
           name: (identifier)
-          (binary_expression
+          value: (binary_expression
             left: (scoped_identifier
               (identifier))
             right: (scoped_identifier

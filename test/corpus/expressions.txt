@@ -1007,7 +1007,7 @@ void f() {
             (primitive_type)))
         (variable_declarator
           name: (identifier)
-          (initializer_list
+          value: (initializer_list
             (number_literal)
             (number_literal)
             (number_literal)))))))
@@ -1035,7 +1035,7 @@ void f() {
           (datatype))
         (variable_declarator
           name: (identifier)
-          (initializer_list
+          value: (initializer_list
             (initializer_list
               (number_literal)
               (number_literal))
