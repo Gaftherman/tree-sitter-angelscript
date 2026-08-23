@@ -1114,6 +1114,16 @@
             "named": true
           }
         ]
+      },
+      "template_params": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "template_parameter_list",
+            "named": true
+          }
+        ]
       }
     },
     "children": {
@@ -3819,6 +3829,22 @@
           "named": true
         }
       ]
+    }
+  },
+  {
+    "type": "template_parameter_list",
+    "named": true,
+    "fields": {
+      "param": {
+        "multiple": true,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      }
     }
   },
   {

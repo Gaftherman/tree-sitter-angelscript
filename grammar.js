@@ -176,6 +176,7 @@ module.exports = grammar({
       repeat(field("modifier", $.declaration_modifier)),
       "class",
       field("name", $.identifier),
+      optional(field("template_params", $.template_parameter_list)),
       choice(
         ";",
         seq(
@@ -480,6 +481,25 @@ module.exports = grammar({
       $._template_open,
       $.type,
       repeat(seq(",", $.type)),
+      $._template_close,
+    ),
+
+    // Template parameters of a class declaration: `class array<T>`, `class map<K, V>`.
+    //
+    // Distinct from template_type_list, which carries the *arguments* at a use site and so holds
+    // types. These are the parameters being introduced, and are plain identifiers - `class map<K,
+    // V>` declares the names K and V, it does not refer to two existing types.
+    //
+    // The '<' and '>' come from the external scanner, the same tokens template_type_list uses, so
+    // this inherits the disambiguation from a less-than comparison that the scanner already does.
+    //
+    // AngelScript scripts cannot declare template classes; the application registers them. They
+    // appear in predefined stubs, which is where the engine's API is written down - `class array<T>`
+    // is the first declaration in every one of them.
+    template_parameter_list: $ => seq(
+      $._template_open,
+      field("param", $.identifier),
+      repeat(seq(",", field("param", $.identifier))),
       $._template_close,
     ),
 

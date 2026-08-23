@@ -783,3 +783,80 @@ Foo@ f = null;
     (variable_declarator
       name: (identifier)
       value: (null_literal))))
+
+==================
+Template class declaration
+==================
+
+class array<T>{
+	void insertLast(const T& in);
+}
+
+---
+
+(script
+  (class_declaration
+    name: (identifier)
+    template_params: (template_parameter_list
+      param: (identifier))
+    body: (class_body
+      (func_declaration
+        return_type: (type
+          (datatype
+            (primitive_type)))
+        name: (identifier)
+        parameters: (parameter_list
+          (parameter
+            param_type: (type
+              (datatype
+                (identifier)))))))))
+
+==================
+Template class with several parameters
+==================
+
+class map<K, V>{
+	V get(const K &in key);
+}
+
+---
+
+(script
+  (class_declaration
+    name: (identifier)
+    template_params: (template_parameter_list
+      param: (identifier)
+      param: (identifier))
+    body: (class_body
+      (func_declaration
+        return_type: (type
+          (datatype
+            (identifier)))
+        name: (identifier)
+        parameters: (parameter_list
+          (parameter
+            param_type: (type
+              (datatype
+                (identifier)))
+            name: (identifier)))))))
+
+==================
+Class without template parameters is unchanged
+==================
+
+class Plain{
+	int x;
+}
+
+---
+
+(script
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (variable_declaration
+        var_type: (type
+          (datatype
+            (primitive_type)))
+        (variable_declarator
+          name: (identifier))))))
