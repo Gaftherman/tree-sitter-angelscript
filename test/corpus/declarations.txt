@@ -860,3 +860,64 @@ class Plain{
             (primitive_type)))
         (variable_declarator
           name: (identifier))))))
+
+==================
+Interface method with a function attribute
+==================
+
+interface IThinker {
+    void Think() explicit;
+}
+
+---
+
+(script
+  (interface_declaration
+    name: (identifier)
+    body: (interface_body
+      (interface_method
+        return_type: (type
+          (datatype
+            (primitive_type)))
+        name: (identifier)
+        parameters: (parameter_list)
+        (func_attributes)))))
+
+==================
+Interface method with const and a function attribute
+==================
+
+interface IThinker {
+    int Count() const property;
+}
+
+---
+
+(script
+  (interface_declaration
+    name: (identifier)
+    body: (interface_body
+      (interface_method
+        return_type: (type
+          (datatype
+            (primitive_type)))
+        name: (identifier)
+        parameters: (parameter_list)
+        (func_attributes)))))
+
+==================
+Funcdef with a function attribute
+==================
+
+funcdef void Callback() delete;
+
+---
+
+(script
+  (funcdef_declaration
+    return_type: (type
+      (datatype
+        (primitive_type)))
+    name: (identifier)
+    parameters: (parameter_list)
+    (func_attributes)))

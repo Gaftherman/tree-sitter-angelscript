@@ -247,18 +247,27 @@ module.exports = grammar({
       "}",
     ),
 
+    // func_attributes is accepted here and rejected semantically, not left out. AngelScript's own
+    // parser refuses every one of override/final/explicit/property/delete on an interface method,
+    // so leaving the production without them turns `void F() explicit;` into a generic syntax
+    // error pointing at the token. Parsing it gives the analyzer a well formed tree to say
+    // precisely what is wrong with, which is the whole difference between a parser and a language
+    // server.
     interface_method: $ => seq(
       field("return_type", $.type),
       optional("&"),
       field("name", $.identifier),
       field("parameters", $.parameter_list),
       optional("const"),
+      optional($.func_attributes),
       ";",
     ),
 
     // =========================================================================
     // FUNCDEF
     // =========================================================================
+    // Same reasoning as interface_method: every func_attribute is invalid on a funcdef, and saying
+    // so precisely is worth more than refusing to parse it.
     funcdef_declaration: $ => seq(
       repeat(field("modifier", $.shared_external_modifier)),
       "funcdef",
@@ -266,6 +275,7 @@ module.exports = grammar({
       optional("&"),
       field("name", $.identifier),
       field("parameters", $.parameter_list),
+      optional($.func_attributes),
       ";",
     ),
 
