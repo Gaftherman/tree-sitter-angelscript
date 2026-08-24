@@ -259,17 +259,6 @@ abstract interface IFoo {};
 (script)
 
 ==================
-Typedef with user-defined type rejected
-:error
-==================
-
-typedef MyClass AliasName;
-
----
-
-(script)
-
-==================
 Assignment missing right-hand side
 :error
 ==================

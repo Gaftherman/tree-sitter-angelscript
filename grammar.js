@@ -162,9 +162,13 @@ module.exports = grammar({
     // =========================================================================
     // TYPEDEF
     // =========================================================================
+    // base_type admits an identifier as well as a primitive_type so that `typedef Entity Alias;`
+    // parses. AngelScript accepts only a primitive there and its own parser answers "Unexpected
+    // token '<identifier>'" for anything else - which names the shape of the mistake exactly, and
+    // is the shape this admits so the analyzer can say it in a sentence instead.
     typedef_declaration: $ => seq(
       "typedef",
-      field("base_type", $.primitive_type),
+      field("base_type", choice($.primitive_type, $.identifier)),
       field("name", $.identifier),
       ";",
     ),
@@ -254,8 +258,12 @@ module.exports = grammar({
     // precisely what is wrong with, which is the whole difference between a parser and a language
     // server.
     interface_method: $ => seq(
-      field("return_type", $.type),
-      optional("&"),
+      // The return type is optional, and a leading '~' is admitted, so that `IThing();` and
+      // `~IThing();` parse as interface members. An interface may declare neither - AngelScript
+      // answers "Expected identifier / Instead found '('" and "Expected data type / Instead found
+      // '~'" - but naming the construct is worth more than refusing to parse it.
+      optional(seq(field("return_type", $.type), optional("&"))),
+      optional("~"),
       field("name", $.identifier),
       field("parameters", $.parameter_list),
       optional("const"),

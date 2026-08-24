@@ -921,3 +921,58 @@ funcdef void Callback() delete;
     name: (identifier)
     parameters: (parameter_list)
     (func_attributes)))
+
+==================
+Typedef of a user-defined type parses and is rejected semantically
+==================
+
+typedef MyClass AliasName;
+
+---
+
+(script
+  (typedef_declaration
+    base_type: (identifier)
+    name: (identifier)))
+
+==================
+Typedef of a primitive
+==================
+
+typedef float real;
+
+---
+
+(script
+  (typedef_declaration
+    base_type: (primitive_type)
+    name: (identifier)))
+
+==================
+Interface constructor and destructor parse and are rejected semantically
+==================
+
+interface IThing {
+    IThing();
+    ~IThing();
+    void Do();
+}
+
+---
+
+(script
+  (interface_declaration
+    name: (identifier)
+    body: (interface_body
+      (interface_method
+        name: (identifier)
+        parameters: (parameter_list))
+      (interface_method
+        name: (identifier)
+        parameters: (parameter_list))
+      (interface_method
+        return_type: (type
+          (datatype
+            (primitive_type)))
+        name: (identifier)
+        parameters: (parameter_list)))))
