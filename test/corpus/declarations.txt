@@ -976,3 +976,111 @@ interface IThing {
             (primitive_type)))
         name: (identifier)
         parameters: (parameter_list)))))
+
+========================================
+Metadata before a global variable
+========================================
+
+[Property]
+int m_Health = 100;
+
+---
+
+(script
+  (metadata
+    name: (identifier))
+  (variable_declaration
+    var_type: (type
+      (datatype
+        (primitive_type)))
+    (variable_declarator
+      name: (identifier)
+      value: (number_literal))))
+
+
+========================================
+Metadata with a value and an argument list
+========================================
+
+[Property, Category="Weapons"]
+[Category("Armas")]
+enum WeaponType { Pistol, Rifle }
+
+---
+
+(script
+  (metadata
+    name: (identifier)
+    name: (identifier)
+    value: (string_literal))
+  (metadata
+    name: (identifier)
+    arguments: (argument_list
+      (string_literal)))
+  (enum_declaration
+    name: (identifier)
+    (enum_member
+      name: (identifier))
+    (enum_member
+      name: (identifier))))
+
+
+========================================
+Metadata on class members
+========================================
+
+class Foo {
+    [Prop] int x;
+    [Meta("v")] void M() {}
+}
+
+---
+
+(script
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (metadata
+        name: (identifier))
+      (variable_declaration
+        var_type: (type
+          (datatype
+            (primitive_type)))
+        (variable_declarator
+          name: (identifier)))
+      (metadata
+        name: (identifier)
+        arguments: (argument_list
+          (string_literal)))
+      (func_declaration
+        return_type: (type
+          (datatype
+            (primitive_type)))
+        name: (identifier)
+        parameters: (parameter_list)
+        body: (statement_block)))))
+
+
+========================================
+Metadata on an interface method
+========================================
+
+interface IBar {
+    [MM] void F();
+}
+
+---
+
+(script
+  (interface_declaration
+    name: (identifier)
+    body: (interface_body
+      (metadata
+        name: (identifier))
+      (interface_method
+        return_type: (type
+          (datatype
+            (primitive_type)))
+        name: (identifier)
+        parameters: (parameter_list)))))
+

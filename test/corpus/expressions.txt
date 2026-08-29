@@ -1463,3 +1463,96 @@ class Foo
               arguments: (argument_list)))
           (return_statement
             (this_expression)))))))
+
+========================================
+Initializer list with an omitted element
+========================================
+
+void main() { array<int> x = { 0, 1, , 4, 5 }; }
+
+---
+
+(script
+  (func_declaration
+    return_type: (type
+      (datatype
+        (primitive_type)))
+    name: (identifier)
+    parameters: (parameter_list)
+    body: (statement_block
+      (variable_declaration
+        var_type: (type
+          (datatype
+            (identifier))
+          (template_type_list
+            (type
+              (datatype
+                (primitive_type)))))
+        (variable_declarator
+          name: (identifier)
+          value: (initializer_list
+            (number_literal)
+            (number_literal)
+            (number_literal)
+            (number_literal)))))))
+
+
+========================================
+Initializer list with a trailing comma
+========================================
+
+void main() { array<int> x = { 1, }; }
+
+---
+
+(script
+  (func_declaration
+    return_type: (type
+      (datatype
+        (primitive_type)))
+    name: (identifier)
+    parameters: (parameter_list)
+    body: (statement_block
+      (variable_declaration
+        var_type: (type
+          (datatype
+            (identifier))
+          (template_type_list
+            (type
+              (datatype
+                (primitive_type)))))
+        (variable_declarator
+          name: (identifier)
+          value: (initializer_list
+            (number_literal)))))))
+
+
+========================================
+Initializer list with a leading omitted element
+========================================
+
+void main() { array<int> x = { , 2 }; }
+
+---
+
+(script
+  (func_declaration
+    return_type: (type
+      (datatype
+        (primitive_type)))
+    name: (identifier)
+    parameters: (parameter_list)
+    body: (statement_block
+      (variable_declaration
+        var_type: (type
+          (datatype
+            (identifier))
+          (template_type_list
+            (type
+              (datatype
+                (primitive_type)))))
+        (variable_declarator
+          name: (identifier)
+          value: (initializer_list
+            (number_literal)))))))
+

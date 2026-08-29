@@ -75,6 +75,7 @@ module.exports = grammar({
     // SCRIPT (top-level)
     // =========================================================================
     script: $ => repeat(choice(
+      $.metadata,
       $.import_declaration,
       $.enum_declaration,
       $.typedef_declaration,
@@ -89,6 +90,35 @@ module.exports = grammar({
       $.using_declaration,
       ";",
     )),
+
+    // =========================================================================
+    // METADATA
+    // =========================================================================
+    // `[Property, Category="Weapons"]` before a declaration. CScriptBuilder collects the text
+    // between the brackets, hands the declaration on without it, and exposes it to the host through
+    // GetMetadataForType and friends - so a script full of metadata compiles, and a parser that
+    // does not know the form turns each annotated declaration into an ERROR node and loses the
+    // symbol, not just the annotation.
+    //
+    // Modelled as a sibling of the declaration it precedes rather than a field on it. CScriptBuilder
+    // strips it the same way, and threading an optional field through the eight declaration rules
+    // that can carry one would buy a structural link this grammar has no other use for. A consumer
+    // that wants the association reads the preceding sibling.
+    //
+    // The entry forms are the ones the builder's own examples use: a bare name, a name with a
+    // value, and a name with an argument list. Deliberately not "any balanced brackets", which
+    // would need an external scanner and would swallow a mistyped index expression whole.
+    metadata: $ => seq(
+      "[",
+      commaSep($._metadata_entry),
+      "]",
+    ),
+
+    _metadata_entry: $ => choice(
+      seq(field("name", $.identifier), "=", field("value", $._expression)),
+      seq(field("name", $.identifier), field("arguments", $.argument_list)),
+      field("name", $.identifier),
+    ),
 
     // =========================================================================
     // IMPORT
@@ -135,6 +165,7 @@ module.exports = grammar({
     namespace_body: $ => seq(
       "{",
       repeat(choice(
+        $.metadata,
         $.import_declaration,
         $.enum_declaration,
         $.typedef_declaration,
@@ -216,6 +247,7 @@ module.exports = grammar({
     class_body: $ => seq(
       "{",
       repeat(choice(
+        $.metadata,
         $.virtual_property,
         $.func_declaration,
         $.variable_declaration,
@@ -263,6 +295,7 @@ module.exports = grammar({
     interface_body: $ => seq(
       "{",
       repeat(choice(
+        $.metadata,
         $.virtual_property,
         $.interface_method,
       )),
@@ -800,10 +833,20 @@ module.exports = grammar({
       $._expression,
     ),
 
+    // An element may be omitted, taking the type's default: `{ 0, 1, , 4, 5 }` compiles, and so do
+    // a leading hole `{ , 1 }` and a trailing comma `{ 1, }` - which is the same production, an
+    // omitted last element. commaSep has no empty alternative, so every one of those turned the
+    // enclosing declaration into an ERROR node.
+    //
+    // Written with the comma as the anchor rather than as commaSep(optional(element)): the latter
+    // can match nothing, and then `{ }` has two derivations - the whole list absent, or present
+    // with one empty element - which is an ambiguity rather than a choice.
     initializer_list: $ => seq(
       "{",
-      commaSep($._initializer_element),
-      optional(","),
+      optional(choice(
+        seq($._initializer_element, repeat(seq(",", optional($._initializer_element)))),
+        repeat1(seq(",", optional($._initializer_element))),
+      )),
       "}",
     ),
 
