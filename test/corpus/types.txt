@@ -437,3 +437,67 @@ funcdef bool Callback(Array<int>@);
             (type
               (datatype
                 (primitive_type)))))))))
+
+==================
+Nested name through an array type
+==================
+
+void sort(T[]::less&in cmp);
+
+---
+
+(script
+  (func_declaration
+    return_type: (type
+      (datatype
+        (primitive_type)))
+    name: (identifier)
+    parameters: (parameter_list
+      (parameter
+        param_type: (type
+          (datatype
+            (identifier))
+          (nested_type_name
+            (identifier)))
+        name: (identifier)))))
+
+==================
+Nested name through a template type
+==================
+
+array<T>::less@ cmp;
+
+---
+
+(script
+  (variable_declaration
+    var_type: (type
+      (datatype
+        (identifier))
+      (template_type_list
+        (type
+          (datatype
+            (identifier))))
+      (nested_type_name
+        (identifier)))
+    (variable_declarator
+      name: (identifier))))
+
+==================
+A plain qualified name is still a scope
+==================
+
+Foo::Bar value;
+
+---
+
+(script
+  (variable_declaration
+    var_type: (type
+      (scope
+        (scoped_identifier
+          (identifier)))
+      (datatype
+        (identifier)))
+    (variable_declarator
+      name: (identifier))))

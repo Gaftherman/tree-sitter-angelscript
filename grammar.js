@@ -17,6 +17,21 @@ function commaSep(rule) {
   return optional(commaSep1(rule));
 }
 
+/**
+ * The handle and array suffixes a type may carry: `T@`, `T[]`, `T@ const`, `T[][]`.
+ *
+ * A helper rather than a grammar rule because it can match nothing, and tree-sitter rejects a rule
+ * that matches the empty string.
+ *
+ * @returns {RepeatRule}
+ */
+function typeSuffixes() {
+  return repeat(choice(
+    seq("[", "]"),
+    seq("@", optional("const")),
+  ));
+}
+
 module.exports = grammar({
   name: "angelscript",
 
@@ -47,6 +62,9 @@ module.exports = grammar({
     [$.scoped_identifier, $.scope],
     // extend scoped chain vs trailing '::' of type scope
     [$.scoped_identifier],
+    // `T[` is an array suffix on a plain type until a `::` follows the `]`, at which point those
+    // brackets were the array part of a nested name - `T[]::less` - all along.
+    [$.type],
     // leading 'shared'/'external' modifiers: ambiguous until the following
     // keyword ('class'/'interface' vs 'enum'/'funcdef') disambiguates.
     [$.declaration_modifier, $.shared_external_modifier],
@@ -488,11 +506,32 @@ module.exports = grammar({
       optional("const"),
       optional($.scope),
       $.datatype,
-      optional($.template_type_list),
-      repeat(choice(
-        seq("[", "]"),
-        seq("@", optional("const")),
-      )),
+      choice(
+        // A plain name, with the usual handle and array suffixes.
+        typeSuffixes(),
+
+        // A declaration nested inside a template or an array type: `array<T>::less`, `T[]::less`.
+        //
+        // A template's nested declarations are named through the template itself, and the standard
+        // array add-on does exactly this - it registers the funcdef `array<T>::less` for its sort
+        // comparator, which predefined stubs spell `T[]::less`. Neither parsed before, because
+        // `scope` reaches a qualifier through `scoped_identifier`, and that rule admits template
+        // arguments only *after* a `::` and never an array suffix. `NS::array<T>::less` parsed;
+        // the same name without a namespace in front did not.
+        //
+        // The nested name lives here, behind the arguments or the brackets, rather than being
+        // added to `scope` - which is what keeps it unreachable for a bare `Foo::Bar`. That name
+        // therefore keeps its existing scope-qualified shape as its only parse instead of becoming
+        // ambiguous with a nested one, and it is why this is spelled as alternatives rather than
+        // one optional tail on the end.
+        seq($.template_type_list, optional($.nested_type_name), typeSuffixes()),
+        seq(repeat1(seq("[", "]")), $.nested_type_name, typeSuffixes()),
+      ),
+    ),
+
+    /** A `::`-qualified name reached through a template or array type: the `::less` of `T[]::less`. */
+    nested_type_name: $ => repeat1(
+      seq("::", $.identifier, optional($.template_type_list)),
     ),
 
     template_type_list: $ => seq(

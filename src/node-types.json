@@ -3163,6 +3163,25 @@
     }
   },
   {
+    "type": "nested_type_name",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "template_type_list",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "parameter",
     "named": true,
     "fields": {
@@ -4171,6 +4190,10 @@
       "types": [
         {
           "type": "datatype",
+          "named": true
+        },
+        {
+          "type": "nested_type_name",
           "named": true
         },
         {
