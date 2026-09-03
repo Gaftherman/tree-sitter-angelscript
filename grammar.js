@@ -893,18 +893,21 @@ module.exports = grammar({
       seq('"', repeat(choice(/[^"\\]/, /\\./)), '"'),
     )),
 
+    // AngelScript supports single quotes as digit separators in numeric literals across all bases.
+    // Because single quotes also delimit string literals, the rule must be strict: separators are
+    // only permitted between valid digits of the given base, never at the start, end, or doubled.
     number_literal: _ => {
-      const hex = /0[xX][0-9a-fA-F]+/;
-      const octal = /0[oO][0-7]+/;
-      const binary = /0[bB][01]+/;
-      const explicit_decimal = /0[dD][0-9]+/;
+      const hex = /0[xX][0-9a-fA-F]+('[0-9a-fA-F]+)*/;
+      const octal = /0[oO][0-7]+('[0-7]+)*/;
+      const binary = /0[bB][01]+('[01]+)*/;
+      const explicit_decimal = /0[dD][0-9]+('[0-9]+)*/;
       const decimal_float = choice(
-        /[0-9]+\.[0-9]*([eE][+-]?[0-9]+)?[fFdD]?/,
-        /[0-9]*\.[0-9]+([eE][+-]?[0-9]+)?[fFdD]?/,
-        /[0-9]+[eE][+-]?[0-9]+[fFdD]?/,
-        /[0-9]+[fFdD]/,
+        /[0-9]+('[0-9]+)*\.[0-9]*([eE][+-]?[0-9]+)?[fFdD]?/,
+        /[0-9]*\.[0-9]+('[0-9]+)*([eE][+-]?[0-9]+)?[fFdD]?/,
+        /[0-9]+('[0-9]+)*[eE][+-]?[0-9]+[fFdD]?/,
+        /[0-9]+('[0-9]+)*[fFdD]/,
       );
-      const decimal_int = /[0-9]+/;
+      const decimal_int = /[0-9]+('[0-9]+)*/;
       return token(choice(hex, octal, binary, explicit_decimal, decimal_float, decimal_int));
     },
 

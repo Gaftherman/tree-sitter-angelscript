@@ -82,3 +82,24 @@ int x;
         (primitive_type)))
     (variable_declarator
       (identifier))))
+
+==================
+Digit separators in every base
+==================
+
+int a = 1'000'000;
+int b = 0xDEAD'BEEF;
+int c = 0b1100'0011;
+int d = 0o7'5'5;
+int e = 0d1'024;
+float f = 1'000.5f;
+
+---
+
+(script
+  (variable_declaration (type (datatype (primitive_type))) (variable_declarator (identifier) (number_literal)))
+  (variable_declaration (type (datatype (primitive_type))) (variable_declarator (identifier) (number_literal)))
+  (variable_declaration (type (datatype (primitive_type))) (variable_declarator (identifier) (number_literal)))
+  (variable_declaration (type (datatype (primitive_type))) (variable_declarator (identifier) (number_literal)))
+  (variable_declaration (type (datatype (primitive_type))) (variable_declarator (identifier) (number_literal)))
+  (variable_declaration (type (datatype (primitive_type))) (variable_declarator (identifier) (number_literal))))
