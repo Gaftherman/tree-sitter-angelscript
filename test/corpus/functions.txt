@@ -59,7 +59,7 @@ int getValue() { return 42; }
     parameters: (parameter_list)
     body: (statement_block
       (return_statement
-        (number_literal)))))
+        value: (number_literal)))))
 
 ==================
 Const function

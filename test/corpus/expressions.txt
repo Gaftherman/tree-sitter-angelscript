@@ -558,7 +558,7 @@ void f() {
     parameters: (parameter_list)
     body: (statement_block
       (if_statement
-        (binary_expression
+        condition: (binary_expression
           left: (binary_expression
             left: (scoped_identifier
               (identifier))
@@ -936,7 +936,7 @@ void f() {
             name: (identifier))
           body: (statement_block
             (return_statement
-              (binary_expression
+              value: (binary_expression
                 left: (scoped_identifier
                   (identifier))
                 right: (scoped_identifier
@@ -977,7 +977,7 @@ void f() {
                 name: (identifier))
               body: (statement_block
                 (return_statement
-                  (binary_expression
+                  value: (binary_expression
                     left: (scoped_identifier
                       (identifier))
                     right: (scoped_identifier
@@ -1338,13 +1338,13 @@ void f() {
     parameters: (parameter_list)
     body: (statement_block
       (if_statement
-        (binary_expression
+        condition: (binary_expression
           left: (scoped_identifier
             (identifier))
           right: (null_literal))
         consequence: (statement_block))
       (if_statement
-        (binary_expression
+        condition: (binary_expression
           left: (scoped_identifier
             (identifier))
           right: (null_literal))
@@ -1462,7 +1462,7 @@ class Foo
                 member: (identifier))
               arguments: (argument_list)))
           (return_statement
-            (this_expression)))))))
+            value: (this_expression)))))))
 
 ========================================
 Initializer list with an omitted element
@@ -1496,7 +1496,6 @@ void main() { array<int> x = { 0, 1, , 4, 5 }; }
             (number_literal)
             (number_literal)))))))
 
-
 ========================================
 Initializer list with a trailing comma
 ========================================
@@ -1525,7 +1524,6 @@ void main() { array<int> x = { 1, }; }
           name: (identifier)
           value: (initializer_list
             (number_literal)))))))
-
 
 ========================================
 Initializer list with a leading omitted element
@@ -1647,7 +1645,7 @@ array<int>@ test() { return array<int>@ = { 1, 2 }; }
     parameters: (parameter_list)
     body: (statement_block
       (return_statement
-        (typed_initializer_list
+        value: (typed_initializer_list
           type: (type
             (datatype
               (identifier))
@@ -1658,5 +1656,3 @@ array<int>@ test() { return array<int>@ = { 1, 2 }; }
           value: (initializer_list
             (number_literal)
             (number_literal)))))))
-
-

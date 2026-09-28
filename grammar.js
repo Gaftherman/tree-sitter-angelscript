@@ -442,7 +442,7 @@ module.exports = grammar({
 
     return_statement: $ => seq(
       "return",
-      optional(choice($.initializer_list, $.typed_initializer_list, $._expression)),
+      optional(field("value", choice($.initializer_list, $.typed_initializer_list, $._expression))),
       ";",
     ),
 
@@ -452,7 +452,7 @@ module.exports = grammar({
 
     // prec.right resolves dangling-else: else binds to innermost if
     if_statement: $ => prec.right(seq(
-      "if", "(", $._expression, ")",
+      "if", "(", field("condition", $._expression), ")",
       field("consequence", $._statement),
       optional(seq("else", field("alternative", $._statement))),
     )),
@@ -481,23 +481,23 @@ module.exports = grammar({
     ),
 
     while_statement: $ => seq(
-      "while", "(", $._expression, ")",
+      "while", "(", field("condition", $._expression), ")",
       field("body", $._statement),
     ),
 
     do_while_statement: $ => seq(
       "do",
       field("body", $._statement),
-      "while", "(", $._expression, ")", ";",
+      "while", "(", field("condition", $._expression), ")", ";",
     ),
 
     switch_statement: $ => seq(
-      "switch", "(", $._expression, ")",
+      "switch", "(", field("condition", $._expression), ")",
       "{", repeat($.case_clause), "}",
     ),
 
     case_clause: $ => seq(
-      choice(seq("case", $._expression), "default"),
+      choice(seq("case", field("value", $._expression)), "default"),
       ":",
       repeat(choice($.variable_declaration, $._statement)),
     ),
@@ -507,8 +507,8 @@ module.exports = grammar({
     continue_statement: _ => seq("continue", ";"),
 
     try_statement: $ => seq(
-      "try", $.statement_block,
-      "catch", $.statement_block,
+      "try", field("body", $.statement_block),
+      "catch", field("handler", $.statement_block),
     ),
 
     // =========================================================================

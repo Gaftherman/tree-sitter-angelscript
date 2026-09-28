@@ -19,7 +19,7 @@ void f() {
     parameters: (parameter_list)
     body: (statement_block
       (if_statement
-        (scoped_identifier
+        condition: (scoped_identifier
           (identifier))
         consequence: (statement_block
           (return_statement))))))
@@ -47,7 +47,7 @@ void f() {
     parameters: (parameter_list)
     body: (statement_block
       (if_statement
-        (scoped_identifier
+        condition: (scoped_identifier
           (identifier))
         consequence: (statement_block
           (expression_statement
@@ -83,14 +83,14 @@ void f() {
     parameters: (parameter_list)
     body: (statement_block
       (if_statement
-        (scoped_identifier
+        condition: (scoped_identifier
           (identifier))
         consequence: (statement_block
           (expression_statement
             (scoped_identifier
               (identifier))))
         alternative: (if_statement
-          (scoped_identifier
+          condition: (scoped_identifier
             (identifier))
           consequence: (statement_block
             (expression_statement
@@ -120,7 +120,7 @@ void f() {
     parameters: (parameter_list)
     body: (statement_block
       (if_statement
-        (scoped_identifier
+        condition: (scoped_identifier
           (identifier))
         consequence: (return_statement)))))
 
@@ -398,7 +398,7 @@ void f() {
     parameters: (parameter_list)
     body: (statement_block
       (while_statement
-        (binary_expression
+        condition: (binary_expression
           left: (scoped_identifier
             (identifier))
           right: (number_literal))
@@ -426,7 +426,7 @@ void f() {
     parameters: (parameter_list)
     body: (statement_block
       (while_statement
-        (binary_expression
+        condition: (binary_expression
           left: (scoped_identifier
             (identifier))
           right: (number_literal))
@@ -460,7 +460,7 @@ void f() {
           (expression_statement
             (scoped_identifier
               (identifier))))
-        (binary_expression
+        condition: (binary_expression
           left: (scoped_identifier
             (identifier))
           right: (number_literal))))))
@@ -493,16 +493,16 @@ void f() {
     parameters: (parameter_list)
     body: (statement_block
       (switch_statement
-        (scoped_identifier
+        condition: (scoped_identifier
           (identifier))
         (case_clause
-          (number_literal)
+          value: (number_literal)
           (expression_statement
             (scoped_identifier
               (identifier)))
           (break_statement))
         (case_clause
-          (number_literal)
+          value: (number_literal)
           (expression_statement
             (scoped_identifier
               (identifier)))
@@ -538,12 +538,12 @@ void f() {
     parameters: (parameter_list)
     body: (statement_block
       (switch_statement
-        (scoped_identifier
+        condition: (scoped_identifier
           (identifier))
         (case_clause
-          (number_literal))
+          value: (number_literal))
         (case_clause
-          (number_literal)
+          value: (number_literal)
           (expression_statement
             (scoped_identifier
               (identifier)))
@@ -576,11 +576,11 @@ void f() {
     parameters: (parameter_list)
     body: (statement_block
       (try_statement
-        (statement_block
+        body: (statement_block
           (expression_statement
             (scoped_identifier
               (identifier))))
-        (statement_block
+        handler: (statement_block
           (expression_statement
             (scoped_identifier
               (identifier))))))))
@@ -604,7 +604,7 @@ void f() {
     parameters: (parameter_list)
     body: (statement_block
       (return_statement
-        (number_literal)))))
+        value: (number_literal)))))
 
 ================================================================================
 Return void
@@ -648,10 +648,10 @@ void f() {
     parameters: (parameter_list)
     body: (statement_block
       (while_statement
-        (boolean_literal)
+        condition: (boolean_literal)
         body: (statement_block
           (if_statement
-            (scoped_identifier
+            condition: (scoped_identifier
               (identifier))
             consequence: (break_statement))
           (continue_statement))))))
