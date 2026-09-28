@@ -386,6 +386,10 @@
             "named": true
           },
           {
+            "type": "typed_initializer_list",
+            "named": true
+          },
+          {
             "type": "unary_expression",
             "named": true
           }
@@ -3521,6 +3525,10 @@
           "named": true
         },
         {
+          "type": "typed_initializer_list",
+          "named": true
+        },
+        {
           "type": "unary_expression",
           "named": true
         }
@@ -3724,6 +3732,10 @@
         },
         {
           "type": "this_expression",
+          "named": true
+        },
+        {
+          "type": "typed_initializer_list",
           "named": true
         },
         {
@@ -4074,6 +4086,10 @@
             "named": true
           },
           {
+            "type": "initializer_list",
+            "named": true
+          },
+          {
             "type": "lambda_expression",
             "named": true
           },
@@ -4111,6 +4127,10 @@
           },
           {
             "type": "this_expression",
+            "named": true
+          },
+          {
+            "type": "typed_initializer_list",
             "named": true
           },
           {
@@ -4246,6 +4266,10 @@
             "named": true
           },
           {
+            "type": "initializer_list",
+            "named": true
+          },
+          {
             "type": "lambda_expression",
             "named": true
           },
@@ -4283,6 +4307,10 @@
           },
           {
             "type": "this_expression",
+            "named": true
+          },
+          {
+            "type": "typed_initializer_list",
             "named": true
           },
           {
@@ -4669,6 +4697,10 @@
           },
           {
             "type": "this_expression",
+            "named": true
+          },
+          {
+            "type": "typed_initializer_list",
             "named": true
           },
           {

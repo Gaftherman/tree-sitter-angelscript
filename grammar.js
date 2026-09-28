@@ -401,7 +401,7 @@ module.exports = grammar({
     variable_declarator: $ => seq(
       field("name", $.identifier),
       optional(choice(
-        seq("=", field("value", choice($.initializer_list, $._expression))),
+        seq("=", field("value", choice($.initializer_list, $.typed_initializer_list, $._expression))),
         field("arguments", $.argument_list),
       )),
     ),
@@ -442,7 +442,7 @@ module.exports = grammar({
 
     return_statement: $ => seq(
       "return",
-      optional(choice($.initializer_list, $._expression)),
+      optional(choice($.initializer_list, $.typed_initializer_list, $._expression)),
       ";",
     ),
 
@@ -654,7 +654,7 @@ module.exports = grammar({
       $.scoped_identifier,
     ),
 
-    parenthesized_expression: $ => seq("(", $._expression, ")"),
+    parenthesized_expression: $ => seq("(", choice($.typed_initializer_list, $._expression), ")"),
 
     // --- Assignment (prec 1, right-associative) ---
     assignment_expression: $ => prec.right(1, seq(
@@ -663,17 +663,17 @@ module.exports = grammar({
         "=", "+=", "-=", "*=", "/=", "%=", "**=",
         "&=", "|=", "^=", "<<=", ">>=", ">>>=", "@=",
       )),
-      // RHS may be brace init list: dict = {{'a', 1}}
-      field("right", choice($.initializer_list, $._expression)),
+      // RHS may be brace init list: dict = {{'a', 1}} or typed init list: arr = array<int> = {1, 2}
+      field("right", choice($.initializer_list, $.typed_initializer_list, $._expression)),
     )),
 
     // --- Ternary (prec 2, right-associative) ---
     ternary_expression: $ => prec.right(2, seq(
       field("condition", $._expression),
       "?",
-      field("consequence", $._expression),
+      field("consequence", choice($.initializer_list, $.typed_initializer_list, $._expression)),
       ":",
-      field("alternative", $._expression),
+      field("alternative", choice($.initializer_list, $.typed_initializer_list, $._expression)),
     )),
 
     // --- Binary operators (prec 3–13) ---

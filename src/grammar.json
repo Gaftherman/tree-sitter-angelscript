@@ -1554,6 +1554,10 @@
                           },
                           {
                             "type": "SYMBOL",
+                            "name": "typed_initializer_list"
+                          },
+                          {
+                            "type": "SYMBOL",
                             "name": "_expression"
                           }
                         ]
@@ -1697,6 +1701,10 @@
                 {
                   "type": "SYMBOL",
                   "name": "initializer_list"
+                },
+                {
+                  "type": "SYMBOL",
+                  "name": "typed_initializer_list"
                 },
                 {
                   "type": "SYMBOL",
@@ -2765,8 +2773,17 @@
           "value": "("
         },
         {
-          "type": "SYMBOL",
-          "name": "_expression"
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "typed_initializer_list"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "_expression"
+            }
+          ]
         },
         {
           "type": "STRING",
@@ -2865,6 +2882,10 @@
                 },
                 {
                   "type": "SYMBOL",
+                  "name": "typed_initializer_list"
+                },
+                {
+                  "type": "SYMBOL",
                   "name": "_expression"
                 }
               ]
@@ -2895,8 +2916,21 @@
             "type": "FIELD",
             "name": "consequence",
             "content": {
-              "type": "SYMBOL",
-              "name": "_expression"
+              "type": "CHOICE",
+              "members": [
+                {
+                  "type": "SYMBOL",
+                  "name": "initializer_list"
+                },
+                {
+                  "type": "SYMBOL",
+                  "name": "typed_initializer_list"
+                },
+                {
+                  "type": "SYMBOL",
+                  "name": "_expression"
+                }
+              ]
             }
           },
           {
@@ -2907,8 +2941,21 @@
             "type": "FIELD",
             "name": "alternative",
             "content": {
-              "type": "SYMBOL",
-              "name": "_expression"
+              "type": "CHOICE",
+              "members": [
+                {
+                  "type": "SYMBOL",
+                  "name": "initializer_list"
+                },
+                {
+                  "type": "SYMBOL",
+                  "name": "typed_initializer_list"
+                },
+                {
+                  "type": "SYMBOL",
+                  "name": "_expression"
+                }
+              ]
             }
           }
         ]
