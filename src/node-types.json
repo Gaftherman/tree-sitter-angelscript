@@ -3123,6 +3123,10 @@
             "named": true
           },
           {
+            "type": "metadata",
+            "named": true
+          },
+          {
             "type": "null_literal",
             "named": true
           },
@@ -3160,6 +3164,24 @@
           }
         ]
       }
+    },
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "boolean_literal",
+          "named": true
+        },
+        {
+          "type": "number_literal",
+          "named": true
+        },
+        {
+          "type": "string_literal",
+          "named": true
+        }
+      ]
     }
   },
   {

@@ -1084,3 +1084,67 @@ interface IBar {
         name: (identifier)
         parameters: (parameter_list)))))
 
+
+========================================
+Complex metadata with multi-word name and nested metadata
+========================================
+
+[factory func = CreateOgre]
+class COgre {
+    [editable] int myPosition;
+    [editable] [range [10, 100]] int myStrength;
+}
+
+[factory]
+COgre @CreateOgre() {
+    return @COgre();
+}
+
+---
+
+(script
+  (metadata
+    name: (identifier)
+    name: (identifier)
+    value: (scoped_identifier
+      (identifier)))
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (metadata
+        name: (identifier))
+      (variable_declaration
+        var_type: (type
+          (datatype
+            (primitive_type)))
+        (variable_declarator
+          name: (identifier)))
+      (metadata
+        name: (identifier))
+      (metadata
+        name: (identifier)
+        value: (metadata
+          (number_literal)
+          (number_literal)))
+      (variable_declaration
+        var_type: (type
+          (datatype
+            (primitive_type)))
+        (variable_declarator
+          name: (identifier)))))
+  (metadata
+    name: (identifier))
+  (func_declaration
+    return_type: (type
+      (datatype
+        (identifier)))
+    name: (identifier)
+    parameters: (parameter_list)
+    body: (statement_block
+      (return_statement
+        value: (unary_expression
+          operand: (call_expression
+            function: (scoped_identifier
+              (identifier))
+            arguments: (argument_list)))))))
+

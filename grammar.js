@@ -68,6 +68,7 @@ module.exports = grammar({
     // leading 'shared'/'external' modifiers: ambiguous until the following
     // keyword ('class'/'interface' vs 'enum'/'funcdef') disambiguates.
     [$.declaration_modifier, $.shared_external_modifier],
+    [$._metadata_entry, $.scoped_identifier],
   ],
 
   rules: {
@@ -110,14 +111,20 @@ module.exports = grammar({
     // would need an external scanner and would swallow a mistyped index expression whole.
     metadata: $ => seq(
       "[",
-      commaSep($._metadata_entry),
+      commaSep1($._metadata_entry),
       "]",
     ),
 
+    _metadata_name: $ => repeat1($.identifier),
+
     _metadata_entry: $ => choice(
-      seq(field("name", $.identifier), "=", field("value", $._expression)),
-      seq(field("name", $.identifier), field("arguments", $.argument_list)),
-      field("name", $.identifier),
+      seq(field("name", $._metadata_name), "=", field("value", choice($._expression, $.metadata))),
+      seq(field("name", $._metadata_name), field("arguments", $.argument_list)),
+      seq(field("name", $._metadata_name), field("value", $.metadata)),
+      field("name", $._metadata_name),
+      $.number_literal,
+      $.string_literal,
+      $.boolean_literal,
     ),
 
     // =========================================================================
