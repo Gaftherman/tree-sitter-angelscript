@@ -293,3 +293,23 @@ abstract void Foo() {}
 ---
 
 (script)
+
+==================
+Missing opening brace before else if reports error on else instead of variable declaration
+:error
+==================
+
+void f() {
+    if (a)
+        x = 1;
+        y = 2;
+    }
+    else if (b) {
+        z = 3;
+    }
+}
+
+---
+
+(script)
+

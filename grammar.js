@@ -43,6 +43,14 @@ module.exports = grammar({
 
   word: $ => $.identifier,
 
+  reserved: {
+    global: _ => [
+      "if", "else", "for", "foreach", "while", "do",
+      "switch", "case", "default", "break", "continue",
+      "return", "try", "catch",
+    ],
+  },
+
   externals: $ => [
     $._template_open,
     $._template_close,
