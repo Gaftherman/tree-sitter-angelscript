@@ -2151,8 +2151,12 @@
               ]
             },
             {
-              "type": "STRING",
-              "value": "default"
+              "type": "FIELD",
+              "name": "default_clause",
+              "content": {
+                "type": "STRING",
+                "value": "default"
+              }
             }
           ]
         },
@@ -2304,21 +2308,25 @@
                   "type": "CHOICE",
                   "members": [
                     {
-                      "type": "CHOICE",
-                      "members": [
-                        {
-                          "type": "STRING",
-                          "value": "in"
-                        },
-                        {
-                          "type": "STRING",
-                          "value": "out"
-                        },
-                        {
-                          "type": "STRING",
-                          "value": "inout"
-                        }
-                      ]
+                      "type": "FIELD",
+                      "name": "direction",
+                      "content": {
+                        "type": "CHOICE",
+                        "members": [
+                          {
+                            "type": "STRING",
+                            "value": "in"
+                          },
+                          {
+                            "type": "STRING",
+                            "value": "out"
+                          },
+                          {
+                            "type": "STRING",
+                            "value": "inout"
+                          }
+                        ]
+                      }
                     },
                     {
                       "type": "BLANK"

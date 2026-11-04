@@ -512,7 +512,7 @@ module.exports = grammar({
     ),
 
     case_clause: $ => seq(
-      choice(seq("case", field("value", $._expression)), "default"),
+      choice(seq("case", field("value", $._expression)), field("default_clause", "default")),
       ":",
       repeat(choice($.variable_declaration, $._statement)),
     ),
@@ -537,7 +537,7 @@ module.exports = grammar({
 
     parameter: $ => seq(
       field("param_type", $.type),
-      optional(seq("&", optional(choice("in", "out", "inout")))),
+      optional(seq("&", optional(field("direction", choice("in", "out", "inout"))))),
       choice(
         "...",
         seq(
