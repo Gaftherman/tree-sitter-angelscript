@@ -1,0 +1,136 @@
+==================
+Closed file has no implicit brace
+==================
+
+class Foo {
+    void f() { int x = 1; }
+}
+
+---
+
+(script
+  (class_declaration
+    (identifier)
+    (class_body
+      (func_declaration
+        (type
+          (datatype
+            (primitive_type)))
+        (identifier)
+        (parameter_list)
+        (statement_block
+          (variable_declaration
+            (type
+              (datatype
+                (primitive_type)))
+            (variable_declarator
+              (identifier)
+              (number_literal))))))))
+
+==================
+Unclosed method keeps its class and body
+==================
+
+class Foo {
+    void f() {
+        int x = 1;
+
+---
+
+(script
+  (class_declaration
+    (identifier)
+    (class_body
+      (func_declaration
+        (type
+          (datatype
+            (primitive_type)))
+        (identifier)
+        (parameter_list)
+        (statement_block
+          (variable_declaration
+            (type
+              (datatype
+                (primitive_type)))
+            (variable_declarator
+              (identifier)
+              (number_literal)))
+          (implicit_close_brace)))
+      (implicit_close_brace))))
+
+==================
+Unclosed namespace and class at end of file
+==================
+
+namespace N {
+class C {
+    int a;
+
+---
+
+(script
+  (namespace_declaration
+    (scoped_identifier
+      (identifier))
+    (namespace_body
+      (class_declaration
+        (identifier)
+        (class_body
+          (variable_declaration
+            (type
+              (datatype
+                (primitive_type)))
+            (variable_declarator
+              (identifier)))
+          (implicit_close_brace)))
+      (implicit_close_brace))))
+
+==================
+Statement still being typed stays local
+:error
+==================
+
+class Foo {
+    void f() {
+        auto x = Bar();
+        x.
+---
+
+(script)
+
+==================
+Unclosed call after return stays local
+:error
+==================
+
+class Foo {
+    void f() {
+        return Deploy(
+---
+
+(script)
+
+==================
+Unclosed call in ternary stays local
+:error
+==================
+
+class Foo {
+    void f() {
+        c ? Reload(
+---
+
+(script)
+
+==================
+Unclosed brace in the middle of a file is unchanged
+:error
+==================
+
+void f() {
+    int x = 1;
+void g() {}
+
+---
+
+(script)

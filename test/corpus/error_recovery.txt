@@ -273,7 +273,6 @@ void f() {
 
 ==================
 Unclosed class body
-:error
 ==================
 
 class Foo {
@@ -281,7 +280,19 @@ class Foo {
 
 ---
 
-(script)
+(script
+  (class_declaration
+    (identifier)
+    (class_body
+      (func_declaration
+        (type
+          (datatype
+            (primitive_type)))
+        (identifier)
+        (parameter_list)
+        (statement_block
+          (implicit_close_brace)))
+      (implicit_close_brace))))
 
 ==================
 Abstract modifier rejected on function (leading position)
@@ -312,4 +323,3 @@ void f() {
 ---
 
 (script)
-

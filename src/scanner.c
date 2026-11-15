@@ -6,10 +6,15 @@ enum TokenType {
     TEMPLATE_OPEN,   // '<' as template opener
     TEMPLATE_CLOSE,  // '>' as template closer (consumes exactly one '>')
     ERROR_SENTINEL,  // never produced; valid only during error recovery
+    IMPLICIT_CLOSE_BRACE,  // zero-width '}' at end of file for a body still open
+    LBRACE,          // '{', counted so the scanner knows how many bodies are open
+    RBRACE,          // '}'
+    SCANNER_HOOK,    // never produced; an extra, so the scanner runs in every state
 };
 
 typedef struct {
     uint32_t template_depth;
+    uint32_t brace_depth;
 } Scanner;
 
 static bool is_alpha(int32_t c) {
@@ -163,19 +168,25 @@ unsigned tree_sitter_angelscript_external_scanner_serialize(
     Scanner *scanner = (Scanner *)payload;
     buffer[0] = (char)(scanner->template_depth & 0xFF);
     buffer[1] = (char)((scanner->template_depth >> 8) & 0xFF);
-    return 2;
+    buffer[2] = (char)(scanner->brace_depth & 0xFF);
+    buffer[3] = (char)((scanner->brace_depth >> 8) & 0xFF);
+    return 4;
 }
 
 void tree_sitter_angelscript_external_scanner_deserialize(
     void *payload, const char *buffer, unsigned length
 ) {
     Scanner *scanner = (Scanner *)payload;
-    if (length >= 2) {
+    if (length >= 4) {
         scanner->template_depth =
             (unsigned char)buffer[0] |
             ((unsigned char)buffer[1] << 8);
+        scanner->brace_depth =
+            (unsigned char)buffer[2] |
+            ((unsigned char)buffer[3] << 8);
     } else {
         scanner->template_depth = 0;
+        scanner->brace_depth = 0;
     }
 }
 
@@ -184,26 +195,16 @@ bool tree_sitter_angelscript_external_scanner_scan(
 ) {
     Scanner *scanner = (Scanner *)payload;
 
-    // Error recovery mode: tree-sitter marks every symbol (including the
-    // never-referenced sentinel) as valid. Only perform the one unambiguous
-    // action — closing a tracked template on a real '>' - so that stray
-    // '<'/'>' inside ERROR regions can't corrupt template_depth.
-    if (valid_symbols[ERROR_SENTINEL]) {
-        if (scanner->template_depth > 0) {
-            skip_ws(lexer);
-            if (lexer->lookahead == '>') {
-                lexer->advance(lexer, false);
-                // '>=' is a comparison operator, not a template close
-                if (lexer->lookahead == '=') {
-                    return false;
-                }
-                lexer->result_symbol = TEMPLATE_CLOSE;
-                scanner->template_depth--;
-                return true;
-            }
-        }
-        return false;
-    }
+    // Braces are scanner tokens so that `brace_depth` always equals the number
+    // of bodies still open. At end of file those bodies are closed with
+    // zero-width tokens - the Python-DEDENT pattern - even in a state where a
+    // `}` is not valid: the parser then sees a real token instead of EOF and
+    // its error recovery stays inside the half-typed statement rather than
+    // wrapping every enclosing body into one ERROR.
+    // The token end is marked before any whitespace is skipped so that a path
+    // returning without consuming text yields a zero-width token; paths that
+    // consume text call mark_end again after consuming it.
+    lexer->mark_end(lexer);
 
     // Implicit (zero-width) template close at end-of-line / end-of-file.
     // If the parser is inside a template argument list that could close here
@@ -214,14 +215,60 @@ bool tree_sitter_angelscript_external_scanner_scan(
     // template_depth, which only real '<' opens increment.
     // Tradeoff: a closing '>' on its own line (`TArray<int\n>`) no longer
     // parses; that style does not occur in real code.
-    if (valid_symbols[TEMPLATE_CLOSE] && scanner->template_depth > 0) {
+    if (!valid_symbols[ERROR_SENTINEL] && valid_symbols[TEMPLATE_CLOSE] && scanner->template_depth > 0) {
         skip_spaces(lexer);
         if (lexer->eof(lexer) || is_eol(lexer->lookahead)) {
-            lexer->mark_end(lexer);
             lexer->result_symbol = TEMPLATE_CLOSE;
             scanner->template_depth--;
             return true;
         }
+    }
+
+    skip_ws(lexer);
+    if (lexer->eof(lexer) && scanner->brace_depth > 0) {
+        // Placed at end of file, past trailing whitespace, so the closed bodies
+        // span the position where the user is still typing.
+        lexer->mark_end(lexer);
+        lexer->result_symbol = IMPLICIT_CLOSE_BRACE;
+        scanner->brace_depth--;
+        return true;
+    }
+    if (lexer->lookahead == '{' && valid_symbols[LBRACE] && !valid_symbols[ERROR_SENTINEL]) {
+        lexer->advance(lexer, false);
+        lexer->mark_end(lexer);
+        lexer->result_symbol = LBRACE;
+        scanner->brace_depth++;
+        return true;
+    }
+    if (lexer->lookahead == '}' && valid_symbols[RBRACE] && !valid_symbols[ERROR_SENTINEL]) {
+        lexer->advance(lexer, false);
+        lexer->mark_end(lexer);
+        lexer->result_symbol = RBRACE;
+        if (scanner->brace_depth > 0) {
+            scanner->brace_depth--;
+        }
+        return true;
+    }
+
+    // Error recovery mode: tree-sitter marks every symbol (including the
+    // never-referenced sentinel) as valid. Only perform the one unambiguous
+    // action — closing a tracked template on a real '>' - so that stray
+    // '<'/'>' inside ERROR regions can't corrupt template_depth.
+    if (valid_symbols[ERROR_SENTINEL]) {
+        if (scanner->template_depth > 0) {
+            if (lexer->lookahead == '>') {
+                lexer->advance(lexer, false);
+                // '>=' is a comparison operator, not a template close
+                if (lexer->lookahead == '=') {
+                    return false;
+                }
+                lexer->mark_end(lexer);
+                lexer->result_symbol = TEMPLATE_CLOSE;
+                scanner->template_depth--;
+                return true;
+            }
+        }
+        return false;
     }
 
     skip_ws(lexer);
@@ -261,6 +308,7 @@ bool tree_sitter_angelscript_external_scanner_scan(
 
         // Consume exactly ONE '>', even if next char is also '>'
         // This handles '>>' being split as two template closes
+        lexer->mark_end(lexer);
         lexer->result_symbol = TEMPLATE_CLOSE;
         if (scanner->template_depth > 0) {
             scanner->template_depth--;

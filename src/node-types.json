@@ -1096,6 +1096,10 @@
           "named": true
         },
         {
+          "type": "implicit_close_brace",
+          "named": true
+        },
+        {
           "type": "metadata",
           "named": true
         },
@@ -1449,6 +1453,10 @@
       "types": [
         {
           "type": "enum_member",
+          "named": true
+        },
+        {
+          "type": "implicit_close_brace",
           "named": true
         }
       ]
@@ -2767,6 +2775,10 @@
           "named": true
         },
         {
+          "type": "implicit_close_brace",
+          "named": true
+        },
+        {
           "type": "index_expression",
           "named": true
         },
@@ -2833,6 +2845,10 @@
       "multiple": true,
       "required": false,
       "types": [
+        {
+          "type": "implicit_close_brace",
+          "named": true
+        },
         {
           "type": "interface_method",
           "named": true
@@ -3296,6 +3312,10 @@
         },
         {
           "type": "funcdef_declaration",
+          "named": true
+        },
+        {
+          "type": "implicit_close_brace",
           "named": true
         },
         {
@@ -3977,6 +3997,10 @@
           "named": true
         },
         {
+          "type": "implicit_close_brace",
+          "named": true
+        },
+        {
           "type": "return_statement",
           "named": true
         },
@@ -4104,6 +4128,10 @@
       "types": [
         {
           "type": "case_clause",
+          "named": true
+        },
+        {
+          "type": "implicit_close_brace",
           "named": true
         }
       ]
@@ -4853,6 +4881,10 @@
         {
           "type": "accessor",
           "named": true
+        },
+        {
+          "type": "implicit_close_brace",
+          "named": true
         }
       ]
     }
@@ -5332,6 +5364,10 @@
   {
     "type": "if",
     "named": false
+  },
+  {
+    "type": "implicit_close_brace",
+    "named": true
   },
   {
     "type": "import",

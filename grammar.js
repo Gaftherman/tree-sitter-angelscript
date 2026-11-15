@@ -39,6 +39,9 @@ module.exports = grammar({
     /\s+/,
     $.comment,
     $.preproc_directive,
+    // Never produced: being an extra it is valid in every state, which makes tree-sitter call
+    // the scanner at end of file even where no other external token is expected.
+    $._scanner_hook,
   ],
 
   word: $ => $.identifier,
@@ -55,6 +58,10 @@ module.exports = grammar({
     $._template_open,
     $._template_close,
     $._error_sentinel,
+    $.implicit_close_brace,
+    $._lbrace,
+    $._rbrace,
+    $._scanner_hook,
   ],
 
   conflicts: $ => [
@@ -178,7 +185,7 @@ module.exports = grammar({
     ),
 
     namespace_body: $ => seq(
-      "{",
+      $._open_brace,
       repeat(choice(
         $.metadata,
         $.import_declaration,
@@ -195,7 +202,7 @@ module.exports = grammar({
         $.using_declaration,
         ";",
       )),
-      "}",
+      $._close_brace,
     ),
 
     // =========================================================================
@@ -210,10 +217,10 @@ module.exports = grammar({
         seq(
           // scoped enum with explicit underlying type (AS 2.31+)
           optional(seq(":", field("underlying_type", choice($.primitive_type, $.identifier)))),
-          "{",
+          $._open_brace,
           commaSep($.enum_member),
           optional(","),
-          "}",
+          $._close_brace,
         ),
       ),
     ),
@@ -260,7 +267,7 @@ module.exports = grammar({
     ),
 
     class_body: $ => seq(
-      "{",
+      $._open_brace,
       repeat(choice(
         $.metadata,
         $.virtual_property,
@@ -271,7 +278,7 @@ module.exports = grammar({
         // the real compiler, same as at script scope.
         ";",
       )),
-      "}",
+      $._close_brace,
     ),
 
     // =========================================================================
@@ -308,13 +315,13 @@ module.exports = grammar({
     ),
 
     interface_body: $ => seq(
-      "{",
+      $._open_brace,
       repeat(choice(
         $.metadata,
         $.virtual_property,
         $.interface_method,
       )),
-      "}",
+      $._close_brace,
     ),
 
     // func_attributes is accepted here and rejected semantically, not left out. AngelScript's own
@@ -392,9 +399,9 @@ module.exports = grammar({
       field("prop_type", $.type),
       optional("&"),
       field("name", $.identifier),
-      "{",
+      $._open_brace,
       repeat($.accessor),
-      "}",
+      $._close_brace,
     )),
 
     accessor: $ => seq(
@@ -426,14 +433,19 @@ module.exports = grammar({
     // =========================================================================
     // STATEMENT BLOCK (stub — expanded in Step 3)
     // =========================================================================
+    // `}` or, at end of file, the scanner's zero-width stand-in for the one still being typed.
+    // Braces come from the scanner, which counts them so it knows when a body is still open at EOF.
+    _open_brace: $ => choice(alias($._lbrace, "{"), "{"),
+    _close_brace: $ => choice(alias($._rbrace, "}"), "}", $.implicit_close_brace),
+
     statement_block: $ => seq(
-      "{",
+      $._open_brace,
       repeat(choice(
         $.variable_declaration,
         $._statement,
         $.using_declaration,
       )),
-      "}",
+      $._close_brace,
     ),
 
     _statement: $ => choice(
@@ -514,7 +526,7 @@ module.exports = grammar({
 
     switch_statement: $ => seq(
       "switch", "(", field("condition", $._expression), ")",
-      "{", repeat($.case_clause), "}",
+      $._open_brace, repeat($.case_clause), $._close_brace,
     ),
 
     case_clause: $ => seq(
@@ -863,12 +875,12 @@ module.exports = grammar({
     // can match nothing, and then `{ }` has two derivations - the whole list absent, or present
     // with one empty element - which is an ambiguity rather than a choice.
     initializer_list: $ => seq(
-      "{",
+      $._open_brace,
       optional(choice(
         seq($._initializer_element, repeat(seq(",", optional($._initializer_element)))),
         repeat1(seq(",", optional($._initializer_element))),
       )),
-      "}",
+      $._close_brace,
     ),
 
     // Anonymous typed list construction used as a value, e.g. a dictionary
