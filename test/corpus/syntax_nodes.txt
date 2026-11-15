@@ -1,0 +1,153 @@
+==================
+Auto handle suffix
+==================
+
+Weapon@+ g_w;
+---
+
+(script
+  (variable_declaration
+    (type
+      (datatype
+        (identifier)))
+    (variable_declarator
+      (identifier))))
+
+==================
+Destructor name carries the destructor field
+==================
+
+class D { ~D() {} }
+---
+
+(script
+  (class_declaration
+    (identifier)
+    (class_body
+      (func_declaration
+        (identifier)
+        (parameter_list)
+        (statement_block)))))
+
+==================
+Void argument is its own node
+==================
+
+void F() { Bar(void); }
+---
+
+(script
+  (func_declaration
+    (type
+      (datatype
+        (primitive_type)))
+    (identifier)
+    (parameter_list)
+    (statement_block
+      (expression_statement
+        (call_expression
+          (scoped_identifier
+            (identifier))
+          (argument_list
+            (void_argument)))))))
+
+==================
+Line comment ends at the newline despite a trailing backslash
+==================
+
+void F() {
+  x = y; // C:\dir\
+  z = 1;
+}
+---
+
+(script
+  (func_declaration
+    (type
+      (datatype
+        (primitive_type)))
+    (identifier)
+    (parameter_list)
+    (statement_block
+      (expression_statement
+        (assignment_expression
+          (scoped_identifier
+            (identifier))
+          (scoped_identifier
+            (identifier))))
+      (comment)
+      (expression_statement
+        (assignment_expression
+          (scoped_identifier
+            (identifier))
+          (number_literal))))))
+
+==================
+Declaration as unbraced if body
+==================
+
+void F() { if (c) int v = 1; }
+---
+
+(script
+  (func_declaration
+    (type
+      (datatype
+        (primitive_type)))
+    (identifier)
+    (parameter_list)
+    (statement_block
+      (if_statement
+        (scoped_identifier
+          (identifier))
+        (variable_declaration
+          (type
+            (datatype
+              (primitive_type)))
+          (variable_declarator
+            (identifier)
+            (number_literal)))))))
+
+==================
+Declaration as unbraced while body
+==================
+
+void F() { while (c) Foo f; }
+---
+
+(script
+  (func_declaration
+    (type
+      (datatype
+        (primitive_type)))
+    (identifier)
+    (parameter_list)
+    (statement_block
+      (while_statement
+        (scoped_identifier
+          (identifier))
+        (variable_declaration
+          (type
+            (datatype
+              (identifier)))
+          (variable_declarator
+            (identifier)))))))
+
+==================
+Destructor written with a return type still parses
+==================
+
+class D { void ~D() {} }
+---
+
+(script
+  (class_declaration
+    (identifier)
+    (class_body
+      (func_declaration
+        (type
+          (datatype
+            (primitive_type)))
+        (identifier)
+        (parameter_list)
+        (statement_block)))))

@@ -145,6 +145,10 @@
         {
           "type": "unary_expression",
           "named": true
+        },
+        {
+          "type": "void_argument",
+          "named": true
         }
       ]
     }
@@ -1303,6 +1307,10 @@
             "named": true
           },
           {
+            "type": "variable_declaration",
+            "named": true
+          },
+          {
             "type": "while_statement",
             "named": true
           }
@@ -1696,6 +1704,10 @@
             "named": true
           },
           {
+            "type": "variable_declaration",
+            "named": true
+          },
+          {
             "type": "while_statement",
             "named": true
           }
@@ -1882,6 +1894,10 @@
             "named": true
           },
           {
+            "type": "variable_declaration",
+            "named": true
+          },
+          {
             "type": "while_statement",
             "named": true
           }
@@ -2027,6 +2043,16 @@
           {
             "type": "statement_block",
             "named": true
+          }
+        ]
+      },
+      "destructor": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "~",
+            "named": false
           }
         ]
       },
@@ -2297,6 +2323,10 @@
             "named": true
           },
           {
+            "type": "variable_declaration",
+            "named": true
+          },
+          {
             "type": "while_statement",
             "named": true
           }
@@ -2438,6 +2468,10 @@
           },
           {
             "type": "try_statement",
+            "named": true
+          },
+          {
+            "type": "variable_declaration",
             "named": true
           },
           {
@@ -4824,6 +4858,11 @@
     }
   },
   {
+    "type": "void_argument",
+    "named": true,
+    "fields": {}
+  },
+  {
     "type": "while_statement",
     "named": true,
     "fields": {
@@ -4877,6 +4916,10 @@
           },
           {
             "type": "try_statement",
+            "named": true
+          },
+          {
+            "type": "variable_declaration",
             "named": true
           },
           {

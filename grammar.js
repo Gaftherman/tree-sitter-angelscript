@@ -28,7 +28,7 @@ function commaSep(rule) {
 function typeSuffixes() {
   return repeat(choice(
     seq("[", "]"),
-    seq("@", optional("const")),
+    seq("@", optional("+"), optional("const")),
   ));
 }
 
@@ -64,8 +64,8 @@ module.exports = grammar({
     [$.scoped_identifier, $.datatype],
     // lambda param `function(x, y)`: identifier can be untyped name or type of typed param
     [$.datatype, $.lambda_parameter_list],
-    // `(void ...)` after identifier: parameter_list vs argument_list with void arg
-    [$.argument_list, $.primitive_type],
+    // `(void ...)` after identifier: a `void` argument vs the `void` primitive type of a parameter
+    [$.void_argument, $.primitive_type],
     // `A::B` at statement start: type scope (var decl) vs expression scoped_identifier
     [$.scoped_identifier, $.scope],
     // extend scoped chain vs trailing '::' of type scope
@@ -361,8 +361,10 @@ module.exports = grammar({
       optional(choice("private", "protected")),
       optional(
         choice(
-          seq(field("return_type", $.type), optional("&")),
-          "~",
+          // `void ~Entity()` is accepted so that the rule "a destructor has no return type" is a
+          // semantic diagnostic and not a syntax error.
+          seq(field("return_type", $.type), optional("&"), optional(field("destructor", "~"))),
+          field("destructor", "~"),
         ),
       ),
       field("name", $.identifier),
@@ -450,6 +452,10 @@ module.exports = grammar({
       ";",
     ),
 
+    // A body written without braces. A declaration is parsed there so that it can be reported as
+    // "declaration not allowed as the sole statement", instead of collapsing into an ERROR node.
+    _embedded_statement: $ => choice($._statement, $.variable_declaration),
+
     expression_statement: $ => seq(
       $._expression,
       ";",
@@ -468,8 +474,8 @@ module.exports = grammar({
     // prec.right resolves dangling-else: else binds to innermost if
     if_statement: $ => prec.right(seq(
       "if", "(", field("condition", $._expression), ")",
-      field("consequence", $._statement),
-      optional(seq("else", field("alternative", $._statement))),
+      field("consequence", $._embedded_statement),
+      optional(seq("else", field("alternative", $._embedded_statement))),
     )),
 
     for_statement: $ => seq(
@@ -478,7 +484,7 @@ module.exports = grammar({
       field("condition", choice($.expression_statement, ";")),
       field("update", optional(commaSep1($._expression))),
       ")",
-      field("body", $._statement),
+      field("body", $._embedded_statement),
     ),
 
     foreach_statement: $ => seq(
@@ -487,7 +493,7 @@ module.exports = grammar({
       ":",
       field("collection", $._expression),
       ")",
-      field("body", $._statement),
+      field("body", $._embedded_statement),
     ),
 
     foreach_variable: $ => seq(
@@ -497,12 +503,12 @@ module.exports = grammar({
 
     while_statement: $ => seq(
       "while", "(", field("condition", $._expression), ")",
-      field("body", $._statement),
+      field("body", $._embedded_statement),
     ),
 
     do_while_statement: $ => seq(
       "do",
-      field("body", $._statement),
+      field("body", $._embedded_statement),
       "while", "(", field("condition", $._expression), ")", ";",
     ),
 
@@ -880,10 +886,12 @@ module.exports = grammar({
       commaSep(seq(
         optional(seq(field("arg_name", $.identifier), ":")),
         // 'void' argument: func(void) — ignores an output value
-        choice($.initializer_list, $.typed_initializer_list, "void", $._expression),
+        choice($.initializer_list, $.typed_initializer_list, $.void_argument, $._expression),
       )),
       ")",
     ),
+
+    void_argument: _ => "void",
 
     // =========================================================================
     // LITERALS
@@ -935,7 +943,8 @@ module.exports = grammar({
     ),
 
     comment: _ => token(choice(
-      seq("//", /(\\+(.|\r?\n)|[^\\\n])*/),
+      // A line comment ends at the newline; AngelScript has no backslash continuation.
+      seq("//", /[^\n]*/),
       seq("/*", /[^*]*\*+([^/*][^*]*\*+)*/, "/"),
     )),
 
