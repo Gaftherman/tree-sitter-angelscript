@@ -38,4 +38,4 @@ Special thanks to [Relrin](https://github.com/Relrin) for creating the original 
 
 ## License
 
-MIT
+BSD-3-Clause. See [LICENSE](LICENSE).
