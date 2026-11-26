@@ -618,11 +618,14 @@ module.exports = grammar({
     //
     // AngelScript scripts cannot declare template classes; the application registers them. They
     // appear in predefined stubs, which is where the engine's API is written down - `class array<T>`
-    // is the first declaration in every one of them.
+    // is the first declaration in every one of them. Each parameter may carry the `class` keyword,
+    // the spelling the engine accepts in RegisterObjectType ("array<class T>") and that
+    // `angelscript --dump-predefined` writes; the keyword is not part of the parameter name.
     template_parameter_list: $ => seq(
       $._template_open,
+      optional("class"),
       field("param", $.identifier),
-      repeat(seq(",", field("param", $.identifier))),
+      repeat(seq(",", optional("class"), field("param", $.identifier))),
       $._template_close,
     ),
 
