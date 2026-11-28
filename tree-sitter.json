@@ -16,7 +16,7 @@
     "license": "BSD-3-Clause",
     "description": "AngelScript grammar for tree-sitter",
     "links": {
-      "repository": "https://github.com/user/tree-sitter-angelscript"
+      "repository": "https://github.com/angelscript-tools/tree-sitter-angelscript"
     }
   }
 }
